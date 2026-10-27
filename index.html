@@ -1,0 +1,2269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Guardianes de la Red · Taller interactivo (10-13 años)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fredoka@5.0.13/600.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fredoka@5.0.13/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.13/400.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.13/700.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/nunito@5.0.13/900.css">
+<style>
+:root{
+  --navy:#0d1830; --navy2:#152748; --navy3:#1d3560;
+  --ink:#12203a; --muted:#5d6e8a;
+  --teal:#17c3b2; --tealD:#0f9c8e;
+  --coral:#ff6b6b; --coralD:#e04f4f;
+  --yellow:#ffd23f; --yellowD:#e0b31f;
+  --purple:#8b5cf6; --sky:#4cc9f0; --green:#3ddc84; --greenD:#28b468;
+  --paper:#ffffff; --paper2:#f4f8ff;
+  --r:20px; --shadow:0 10px 0 rgba(0,0,0,.16);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Nunito',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color:#eaf1ff; min-height:100vh;
+  background:
+    radial-gradient(1000px 520px at 12% -8%, #23457a 0%, transparent 60%),
+    radial-gradient(800px 480px at 92% 4%, #1b6f74 0%, transparent 55%),
+    linear-gradient(180deg,#0d1830 0%,#111f3c 45%,#0a1426 100%);
+  background-attachment:fixed;
+}
+h1,h2,h3,h4,.f{font-family:'Fredoka','Nunito',system-ui,sans-serif;font-weight:700;letter-spacing:.2px}
+button{font-family:'Fredoka','Nunito',sans-serif}
+::selection{background:var(--yellow);color:#12203a}
+#stars-bg{position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.55}
+#stars-bg i{position:absolute;width:3px;height:3px;border-radius:50%;background:#fff;animation:tw 4s infinite ease-in-out}
+@keyframes tw{0%,100%{opacity:.15;transform:scale(.7)}50%{opacity:.9;transform:scale(1.3)}}
+.wrap{position:relative;z-index:2;max-width:1180px;margin:0 auto;padding:14px 16px 90px}
+
+/* ---------- TOPBAR ---------- */
+#topbar{position:sticky;top:0;z-index:60;backdrop-filter:blur(10px);
+  background:linear-gradient(180deg,rgba(9,17,34,.95),rgba(9,17,34,.72));
+  border-bottom:2px solid rgba(255,255,255,.08)}
+.tb{max-width:1180px;margin:0 auto;display:flex;gap:10px;align-items:center;padding:10px 16px;flex-wrap:wrap}
+.tb .logo{display:flex;align-items:center;gap:10px;cursor:pointer}
+.tb .logo svg{width:42px;height:42px;flex:0 0 auto;filter:drop-shadow(0 3px 0 rgba(0,0,0,.25))}
+.tb .logo b{font-family:'Fredoka';font-size:19px;line-height:1;display:block;color:#fff}
+.tb .logo span{font-size:11px;color:#9fb4d8;letter-spacing:.6px;text-transform:uppercase}
+.chips{margin-left:auto;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.chip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.09);border:1.5px solid rgba(255,255,255,.14);
+  padding:6px 12px;border-radius:999px;font-weight:900;font-size:13px;color:#fff;cursor:pointer;transition:.2s}
+.chip:hover{background:rgba(255,255,255,.16);transform:translateY(-2px)}
+.chip.gold{background:linear-gradient(135deg,#ffd23f,#ff9f1c);color:#3a2600;border-color:#ffe9a8}
+.xpwrap{min-width:150px}
+.xpbar{height:9px;background:rgba(255,255,255,.14);border-radius:99px;overflow:hidden;margin-top:4px}
+.xpbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal),var(--sky),var(--yellow));border-radius:99px;transition:width .6s cubic-bezier(.2,.9,.2,1)}
+.xpwrap small{font-size:10.5px;color:#a9bde0;letter-spacing:.4px}
+
+/* ---------- GENERIC ---------- */
+.card{background:var(--paper);color:var(--ink);border-radius:var(--r);padding:20px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.card.soft{background:var(--paper2)}
+.card.dark{background:linear-gradient(160deg,#182c52,#101d38);color:#e8f0ff;box-shadow:0 10px 0 rgba(0,0,0,.3)}
+.grid{display:grid;gap:16px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(290px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(190px,1fr))}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.btn{border:none;cursor:pointer;padding:12px 20px;border-radius:16px;font-size:15px;font-weight:700;color:#12203a;
+  background:var(--yellow);box-shadow:0 5px 0 var(--yellowD);transition:.08s;position:relative}
+.btn:active{transform:translateY(4px);box-shadow:0 1px 0 var(--yellowD)}
+.btn.teal{background:var(--teal);box-shadow:0 5px 0 var(--tealD);color:#04231f}
+.btn.coral{background:var(--coral);box-shadow:0 5px 0 var(--coralD);color:#fff}
+.btn.purple{background:var(--purple);box-shadow:0 5px 0 #6b3fd1;color:#fff}
+.btn.ghost{background:rgba(255,255,255,.1);color:#fff;box-shadow:0 5px 0 rgba(0,0,0,.25)}
+.btn.sm{padding:8px 14px;font-size:13px;border-radius:12px;box-shadow:0 4px 0 rgba(0,0,0,.18)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:99px;font-weight:900;font-size:12px;letter-spacing:.3px}
+.tag{background:#e8f0ff;color:#28447a;padding:4px 10px;border-radius:10px;font-size:12px;font-weight:800;display:inline-block}
+h2.sec{font-size:clamp(20px,3.4vw,30px);margin:0 0 4px}
+.lead{color:#4a5c7a;margin:0 0 14px;font-size:15px;line-height:1.6}
+.dark .lead{color:#b9c9e8}
+hr.sep{border:none;border-top:2px dashed rgba(18,32,58,.14);margin:18px 0}
+.dark hr.sep{border-color:rgba(255,255,255,.16)}
+ul.tick{list-style:none;padding:0;margin:8px 0}
+ul.tick li{padding:7px 0 7px 32px;position:relative;line-height:1.5;font-size:14.5px;color:#33415e}
+ul.tick li:before{content:"✔";position:absolute;left:0;top:6px;width:22px;height:22px;border-radius:50%;
+  background:#e3fff6;color:var(--tealD);font-size:12px;display:grid;place-items:center;font-weight:900}
+.dark ul.tick li{color:#dbe6fb}
+.dark ul.tick li:before{background:rgba(23,195,178,.2);color:#5ff0e0}
+.box{border-radius:16px;padding:14px 16px;margin:12px 0;font-size:14.5px;line-height:1.6}
+.box.tip{background:#e8fbf6;border-left:6px solid var(--teal)}
+.box.warn{background:#fff1f1;border-left:6px solid var(--coral)}
+.box.note{background:#fff8e1;border-left:6px solid var(--yellow)}
+.box.info{background:#eef3ff;border-left:6px solid var(--sky)}
+.dark .box.tip{background:rgba(23,195,178,.14);color:#dffaf3}
+.dark .box.warn{background:rgba(255,107,107,.14);color:#ffe2e2}
+.dark .box.note{background:rgba(255,210,63,.14);color:#fff5d4}
+.dark .box.info{background:rgba(76,201,240,.14);color:#dff3ff}
+.box b{font-family:'Fredoka'}
+.illus{width:100%;height:auto;display:block;border-radius:16px}
+.artframe{background:linear-gradient(160deg,#f7fbff,#e9f2ff);border-radius:18px;padding:10px;border:2px dashed #c9dcf5}
+.dark .artframe{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.18)}
+
+/* ---------- HOME ---------- */
+.hero{display:grid;grid-template-columns:1.15fr .85fr;gap:22px;align-items:center;
+  background:linear-gradient(135deg,rgba(23,195,178,.2),rgba(139,92,246,.22));border:2px solid rgba(255,255,255,.16);
+  border-radius:28px;padding:24px;margin-bottom:22px}
+@media(max-width:820px){.hero{grid-template-columns:1fr}}
+.hero h1{font-size:clamp(26px,5vw,46px);line-height:1.05;margin:0 0 10px;color:#fff;text-shadow:0 4px 0 rgba(0,0,0,.25)}
+.hero p{color:#d6e4ff;font-size:16px;line-height:1.6;margin:0 0 14px}
+.namebox{display:flex;gap:8px;flex-wrap:wrap}
+input[type=text],textarea,select{font-family:'Nunito';font-size:15px;padding:11px 14px;border-radius:14px;border:2px solid #cfdcf2;background:#fff;color:var(--ink);width:100%}
+textarea{resize:vertical;line-height:1.6}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--teal);box-shadow:0 0 0 4px rgba(23,195,178,.2)}
+.dark input[type=text],.dark textarea,.dark select{background:rgba(255,255,255,.95)}
+.path{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:18px}
+.mod{background:var(--paper);color:var(--ink);border-radius:24px;padding:0;overflow:hidden;box-shadow:var(--shadow);
+  cursor:pointer;transition:.22s;border:3px solid transparent;text-align:left;display:block;width:100%}
+.mod:hover{transform:translateY(-6px) rotate(-.5deg);border-color:var(--yellow)}
+.mod .top{padding:16px 18px;color:#fff;position:relative;overflow:hidden;min-height:118px}
+.mod .top svg{position:absolute;right:-8px;bottom:-8px;width:120px;opacity:.95}
+.mod .num{font-family:'Fredoka';font-size:12px;letter-spacing:2px;opacity:.9}
+.mod h3{margin:2px 0 0;font-size:20px;line-height:1.15;max-width:62%}
+.mod .body{padding:14px 18px 18px}
+.mod .body p{font-size:13.5px;color:var(--muted);margin:0 0 10px;line-height:1.5}
+.ring{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:900;font-size:12px;color:var(--ink);
+  background:conic-gradient(var(--teal) calc(var(--p)*1%), #e6edf9 0)}
+.ring span{background:#fff;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
+
+/* ---------- MODULE ---------- */
+.modhead{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.modhead .big{width:64px;height:64px;border-radius:20px;display:grid;place-items:center;font-size:30px;flex:0 0 auto;box-shadow:0 6px 0 rgba(0,0,0,.25)}
+.tabs{display:flex;gap:8px;background:rgba(255,255,255,.08);padding:6px;border-radius:99px;margin-bottom:18px;flex-wrap:wrap;border:2px solid rgba(255,255,255,.12)}
+.tab{flex:1;min-width:110px;border:none;background:transparent;color:#c9d8f5;padding:11px 14px;border-radius:99px;cursor:pointer;font-size:14.5px;font-weight:700;transition:.2s}
+.tab.on{background:#fff;color:var(--ink);box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.acc{border-radius:18px;background:#fff;color:var(--ink);margin-bottom:12px;overflow:hidden;box-shadow:0 6px 0 rgba(0,0,0,.14)}
+.acc>button{width:100%;display:flex;gap:12px;align-items:center;background:none;border:none;padding:16px 18px;cursor:pointer;text-align:left;font-size:16.5px;font-weight:700;font-family:'Fredoka';color:var(--ink)}
+.acc>button .ic{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-size:19px;flex:0 0 auto}
+.acc>button .ar{margin-left:auto;transition:.25s;color:#94a6c4}
+.acc.open>button .ar{transform:rotate(90deg)}
+.acc .in{max-height:0;overflow:hidden;transition:max-height .35s ease}
+.acc.open .in{max-height:4000px}
+.acc .pad{padding:0 18px 18px}
+.flipgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}
+.flip{perspective:900px;height:170px;cursor:pointer}
+.flip .in2{position:relative;width:100%;height:100%;transition:transform .55s;transform-style:preserve-3d}
+.flip.on .in2{transform:rotateY(180deg)}
+.flip .fc,.flip .bk{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;padding:14px;display:flex;flex-direction:column;justify-content:center}
+.flip .fc{background:linear-gradient(150deg,#1e3a68,#16294a);color:#fff;border:2px solid rgba(255,255,255,.14)}
+.flip .bk{transform:rotateY(180deg);background:#fff;color:var(--ink);border:2px solid #dbe6f7;font-size:13.2px;line-height:1.45;overflow:auto}
+table.tbl{width:100%;border-collapse:collapse;font-size:13.4px;background:#fff;border-radius:14px;overflow:hidden}
+table.tbl th{background:var(--ink);color:#fff;padding:10px 8px;text-align:left;font-family:'Fredoka';font-weight:600;font-size:12.6px}
+table.tbl td{padding:9px 8px;border-bottom:1px solid #eaf0fa;color:#31415e;vertical-align:top}
+table.tbl tr:nth-child(even) td{background:#f8fbff}
+table.tbl tr:hover td{background:#eefaf7}
+.scrollx{overflow-x:auto;border-radius:14px;box-shadow:0 4px 14px rgba(0,0,0,.08)}
+
+/* ---------- GAMES ---------- */
+.game{background:linear-gradient(160deg,#16294a,#0e1a33);border-radius:24px;padding:18px;border:2px solid rgba(255,255,255,.12);color:#eaf1ff}
+.game h3{margin:0 0 6px;font-size:22px;color:#fff}
+.qbar{background:rgba(255,255,255,.08);border-radius:14px;padding:12px 14px;margin-bottom:12px;font-size:15px;line-height:1.5}
+.opt{display:block;width:100%;text-align:left;background:#fff;color:var(--ink);border:3px solid transparent;border-radius:16px;
+  padding:13px 16px;margin-bottom:10px;cursor:pointer;font-size:15px;font-weight:800;box-shadow:0 5px 0 rgba(0,0,0,.18);transition:.12s}
+.opt:hover{transform:translateY(-2px);border-color:var(--sky)}
+.opt.ok{background:#e2fff0;border-color:var(--green);box-shadow:0 5px 0 var(--greenD)}
+.opt.no{background:#ffe9e9;border-color:var(--coral);box-shadow:0 5px 0 var(--coralD)}
+.opt.dis{opacity:.6;cursor:not-allowed}
+canvas#pac{display:block;width:100%;max-width:630px;margin:0 auto;border-radius:14px;background:#060b1c;
+  border:3px solid #2b4d8f;image-rendering:pixelated;touch-action:none}
+.dpad{display:grid;grid-template-columns:repeat(3,58px);grid-template-rows:repeat(3,58px);gap:6px;justify-content:center;margin:12px auto 0;user-select:none}
+.dpad button{border:none;border-radius:14px;background:rgba(255,255,255,.12);color:#fff;font-size:22px;cursor:pointer;box-shadow:0 4px 0 rgba(0,0,0,.3)}
+.dpad button:active{background:var(--teal);color:#04231f;transform:translateY(3px);box-shadow:none}
+.hearts{font-size:20px;letter-spacing:2px}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:rgba(6,12,30,.86);border-radius:20px;z-index:5;padding:18px;text-align:center}
+.overlay .oc{max-width:420px}
+.shake{animation:sh .4s}
+@keyframes sh{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.pop{animation:pop .35s}
+@keyframes pop{0%{transform:scale(.7);opacity:0}70%{transform:scale(1.06)}100%{transform:scale(1);opacity:1}}
+.pbar{height:12px;background:rgba(255,255,255,.12);border-radius:99px;overflow:hidden;margin:8px 0 14px}
+.pbar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--yellow));width:0;transition:width .4s}
+.starsrow{font-size:34px;letter-spacing:6px}
+.kv{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed rgba(255,255,255,.16);font-size:14px}
+.drag{background:#fff;color:var(--ink);border-radius:14px;padding:12px 14px;margin-bottom:8px;font-size:14px;font-weight:800;cursor:pointer;
+  border-left:6px solid var(--sky);box-shadow:0 4px 0 rgba(0,0,0,.14);transition:.15s}
+.drag:hover{transform:translateX(4px)}
+.drag.sel{border-left-color:var(--yellow);background:#fffbe8}
+.drag.done{opacity:.42;border-left-color:var(--green);text-decoration:line-through}
+.dropz{border:3px dashed rgba(255,255,255,.28);border-radius:16px;padding:12px;min-height:70px;margin-bottom:10px;transition:.2s}
+.dropz:hover{border-color:var(--yellow);background:rgba(255,210,63,.07)}
+.dropz.hit{border-color:var(--green);background:rgba(61,220,132,.12)}
+.stepchip{display:flex;gap:10px;align-items:flex-start;background:#fff;color:var(--ink);border-radius:14px;padding:11px 13px;margin-bottom:8px;box-shadow:0 4px 0 rgba(0,0,0,.14)}
+.stepchip .n{width:28px;height:28px;border-radius:50%;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:900;font-size:13px;flex:0 0 auto}
+.zones{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+.zone{border-radius:14px;padding:12px;font-size:13.5px;font-weight:800;cursor:pointer;border:3px solid transparent;transition:.2s;text-align:center}
+.zone.on{transform:scale(1.04);border-color:#fff}
+.count{font-weight:900;font-size:13px;padding:4px 10px;border-radius:99px;background:#eef3ff;color:#2c4a80}
+.count.good{background:#dcffe9;color:#166b3a}
+.count.bad{background:#ffe6e6;color:#a02c2c}
+.mapnode{border-radius:14px;padding:8px 12px;margin:6px 0;font-size:13.5px;font-weight:800;color:#fff;display:flex;gap:8px;align-items:center}
+.mapnode button{margin-left:auto;background:rgba(0,0,0,.2);border:none;color:#fff;border-radius:8px;cursor:pointer;padding:2px 8px}
+.mindmap{position:relative;background:radial-gradient(circle at 50% 30%,#fff,#eef4ff);border-radius:18px;padding:18px;color:var(--ink)}
+.mmcenter{width:150px;height:150px;border-radius:50%;background:linear-gradient(150deg,var(--purple),#5b34c9);color:#fff;display:grid;place-items:center;
+  text-align:center;padding:14px;margin:0 auto;font-family:'Fredoka';font-size:14px;box-shadow:0 8px 0 rgba(0,0,0,.16);z-index:2;position:relative}
+.branches{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:16px}
+.branch{border-radius:16px;padding:12px;color:#fff;min-height:120px}
+.branch h4{margin:0 0 8px;font-size:15px}
+.cert{background:linear-gradient(160deg,#fffdf5,#fff6dd);color:#3a2c00;border:6px double #d4a72c;border-radius:20px;padding:28px;text-align:center}
+.badge{display:inline-grid;place-items:center;width:74px;height:74px;border-radius:50%;background:linear-gradient(150deg,#ffd23f,#ff9f1c);
+  box-shadow:0 6px 0 #b9781a;font-size:30px;margin:4px}
+.badge.off{background:#2a3a5c;box-shadow:0 6px 0 #1b2740;filter:grayscale(1);opacity:.5}
+#toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,120px);z-index:200;background:#12203a;color:#fff;
+  padding:13px 22px;border-radius:99px;font-weight:800;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.35s;border:2px solid rgba(255,255,255,.2);max-width:90vw;text-align:center}
+#toast.show{transform:translate(-50%,0)}
+#modal{position:fixed;inset:0;background:rgba(4,10,24,.8);z-index:300;display:none;place-items:center;padding:18px}
+#modal.on{display:grid}
+#modal .mc{background:#fff;color:var(--ink);border-radius:22px;padding:24px;max-width:520px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.5);animation:pop .3s}
+.flow{display:flex;flex-direction:column;gap:0}
+.fstep{display:flex;gap:12px;align-items:flex-start}
+.fstep .dot{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;font-weight:900;color:#fff;flex:0 0 auto;box-shadow:0 4px 0 rgba(0,0,0,.2)}
+.fstep .ln{width:4px;height:24px;background:#d6e2f5;margin-left:17px}
+.cycle{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.cyc{background:#fff;border-radius:14px;padding:12px;box-shadow:0 5px 0 rgba(0,0,0,.12);cursor:pointer;border-top:6px solid var(--sky);transition:.2s}
+.cyc:hover{transform:translateY(-4px)}
+.cyc b{display:block;font-family:'Fredoka';font-size:14px;margin-bottom:4px;color:var(--ink)}
+.cyc small{color:#5d6e8a;font-size:12.4px;line-height:1.45;display:block}
+.hotspot{position:absolute;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:900;font-size:12px;cursor:pointer;
+  border:3px solid #fff;box-shadow:0 3px 8px rgba(0,0,0,.35);animation:beat 2s infinite}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;font-weight:800;color:#c9d8f5;margin-top:8px}
+.legend i{width:14px;height:14px;border-radius:4px;display:inline-block;margin-right:5px;vertical-align:-2px}
+.fab{position:fixed;right:16px;bottom:16px;z-index:80;display:flex;flex-direction:column;gap:8px}
+.fab button{width:52px;height:52px;border-radius:50%;border:none;cursor:pointer;font-size:22px;box-shadow:0 6px 18px rgba(0,0,0,.4)}
+.small{font-size:12.5px;color:var(--muted)}
+.dark .small{color:#9fb4d8}
+.chk{display:flex;gap:10px;align-items:flex-start;background:#fff;border-radius:14px;padding:11px 13px;margin-bottom:8px;cursor:pointer;
+  box-shadow:0 4px 0 rgba(0,0,0,.12);font-size:14px;color:var(--ink);font-weight:700;border-left:6px solid #dfe8f7}
+.chk.on{border-left-color:var(--green);background:#f2fff7}
+.chk .bx{width:24px;height:24px;border-radius:8px;border:3px solid #c6d5ec;flex:0 0 auto;display:grid;place-items:center;font-size:13px;color:transparent}
+.chk.on .bx{background:var(--green);border-color:var(--greenD);color:#fff}
+#print-area{display:none}
+@media print{
+  body{background:#fff!important;color:#000!important}
+  body *{visibility:hidden!important}
+  #print-area,#print-area *{visibility:visible!important}
+  #print-area{display:block!important;position:absolute;left:0;top:0;width:100%;padding:14mm;color:#000;font-size:12px}
+  #print-area h1,#print-area h2,#print-area h3{color:#000}
+  #print-area table{border-collapse:collapse;width:100%}
+  #print-area td,#print-area th{border:1px solid #333;padding:5px}
+}
+@media(max-width:620px){
+  .wrap{padding:10px 12px 100px}
+  .card{padding:15px}
+  .dpad{grid-template-columns:repeat(3,52px);grid-template-rows:repeat(3,52px)}
+}
+</style>
+</head>
+<body>
+<div id="stars-bg"></div>
+<header id="topbar">
+  <div class="tb">
+    <div class="logo" onclick="go('home')">
+      <span id="logoArt"></span>
+      <span><b>Guardianes de la Red</b><span>Taller de ciudadanía digital</span></span>
+    </div>
+    <div class="chips">
+      <div class="chip gold" id="chipStars" onclick="go('diploma')" title="Estrellas">⭐ <span id="starCount">0</span></div>
+      <div class="chip" id="chipSound" onclick="toggleSound()">🔊</div>
+      <div class="xpwrap chip" style="cursor:default">
+        <div style="display:flex;gap:6px;align-items:center">⚡ <span id="lvlName">Explorador</span> · <span id="xpNum">0</span> XP</div>
+        <div class="xpbar"><i id="xpFill"></i></div>
+        <small id="xpNext">Faltan 200 XP para el siguiente nivel</small>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="wrap"><div id="view"></div></main>
+<div class="fab">
+  <button class="btn sm" style="width:52px;height:52px;border-radius:50%" onclick="go('home')" title="Mapa">🗺️</button>
+</div>
+<div id="toast"></div>
+<div id="modal" onclick="if(event.target===this)closeModal()"><div class="mc" id="modalContent"></div></div>
+<div id="print-area"></div>
+
+<script>
+/* =====================================================================
+   GUARDIANES DE LA RED — Taller interactivo (10-13 años)
+   ===================================================================== */
+
+/* ---------- utilidades ---------- */
+const $=(s,r=document)=>r.querySelector(s);
+const $$=(s,r=document)=>Array.from(r.querySelectorAll(s));
+const shuffle=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function roundRectPath(x,y,w,h,r){return `M${x+r},${y}h${w-2*r}a${r},${r} 0 0 1 ${r},${r}v${h-2*r}a${r},${r} 0 0 1 -${r},${r}h-${w-2*r}a${r},${r} 0 0 1 -${r},-${r}v-${h-2*r}a${r},${r} 0 0 1 ${r},-${r}z`}
+if(!CanvasRenderingContext2D.prototype.roundRect){CanvasRenderingContext2D.prototype.roundRect=function(x,y,w,h,r){this.beginPath();this.moveTo(x+r,y);this.arcTo(x+w,y,x+w,y+h,r);this.arcTo(x+w,y+h,x,y+h,r);this.arcTo(x,y+h,x,y,r);this.arcTo(x,y,x+w,y,r);this.closePath();return this}}
+
+/* ---------- sonido ---------- */
+let AC=null, SOUND=true;
+function beep(f,d,type='square',v=.06){
+  if(!SOUND)return;
+  try{
+    AC=AC||new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(),g=AC.createGain();
+    o.type=type;o.frequency.value=f;g.gain.value=v;
+    o.connect(g);g.connect(AC.destination);
+    o.start();g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+d);o.stop(AC.currentTime+d);
+  }catch(e){}
+}
+const sfx={
+  chomp:()=>beep(420,.05,'square',.045),
+  ok:()=>{beep(660,.09);setTimeout(()=>beep(880,.12),90)},
+  bad:()=>{beep(180,.22,'sawtooth',.07)},
+  win:()=>{[523,659,784,1046].forEach((f,i)=>setTimeout(()=>beep(f,.16,'triangle',.08),i*110))},
+  click:()=>beep(300,.03,'sine',.04),
+  star:()=>{[880,1174].forEach((f,i)=>setTimeout(()=>beep(f,.14,'triangle',.07),i*90))}
+};
+function toggleSound(){SOUND=!SOUND;$('#chipSound').textContent=SOUND?'🔊':'🔇';toast(SOUND?'Sonido activado 🔊':'Sonido apagado 🔇')}
+
+/* ---------- estado ---------- */
+const KEY='guardianesRed2026';
+let S={name:'',xp:0,done:{},missions:{},sound:true,
+  m1:{plats:[],elems:{},tbl:{},text:'',checks:[]},
+  m2:{audit:{},shield:{},order:[],checks:[]},
+  m3:{map:{op:[],de:[],sm:[],co:[]},topic:'',checks:[]},
+  m4:{commit:{},checks:[]}};
+try{const raw=localStorage.getItem(KEY);if(raw)S=Object.assign(S,JSON.parse(raw))}catch(e){}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}}
+const LEVELS=[[0,'Explorador/a'],[200,'Navegante'],[450,'Analista de Interfaces'],[750,'Detective de Datos'],[1100,'Guardián de la Red'],[1500,'Maestro/a Ciudadano/a']];
+function level(){let l=LEVELS[0];for(const x of LEVELS){if(S.xp>=x[0])l=x}return l}
+function addXP(n,msg){S.xp+=n;save();paintTop();toast((msg||'')+' +'+n+' XP ⚡')}
+function totalStars(){return Object.values(S.done).reduce((a,b)=>a+(b||0),0)+Object.values(S.missions).filter(Boolean).length*2}
+function paintTop(){
+  const l=level();const idx=LEVELS.findIndex(x=>x[0]===l[0]);const nxt=LEVELS[idx+1];
+  $('#lvlName').textContent=l[1];$('#xpNum').textContent=S.xp;$('#starCount').textContent=totalStars();
+  const base=l[0],top=nxt?nxt[0]:l[0]+400;
+  $('#xpFill').style.width=Math.min(100,((S.xp-base)/(top-base))*100)+'%';
+  $('#xpNext').textContent=nxt?('Faltan '+(top-S.xp)+' XP para: '+nxt[1]):'¡Nivel máximo alcanzado! 🏆';
+  $('#chipSound').textContent=SOUND?'🔊':'🔇';
+}
+let toastT=null;
+function toast(m){const t=$('#toast');t.innerHTML=m;t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('show'),2600)}
+function modal(html){$('#modalContent').innerHTML=html;$('#modal').classList.add('on')}
+function closeModal(){$('#modal').classList.remove('on')}
+
+/* =====================================================================
+   ARTE SVG (ilustraciones elaboradas, hechas a mano en código)
+   ===================================================================== */
+function kid(x,y,s,o){
+  o=o||{};
+  const skin=o.skin||'#f2c29b',hair=o.hair||'#2b1c14',shirt=o.shirt||'#17c3b2',pants=o.pants||'#2c3e63',hs=o.hairStyle||0,face=o.face||'happy',arm=o.arm||0;
+  let hairSvg='';
+  if(hs===0)hairSvg=`<path d="M-19,-64a19,19 0 0 1 38,0z" fill="${hair}"/><rect x="-19" y="-66" width="38" height="7" rx="3" fill="${hair}"/>`;
+  if(hs===1)hairSvg=`<path d="M-19,-63a19,19 0 0 1 38,0z" fill="${hair}"/><circle cx="-18" cy="-58" r="8" fill="${hair}"/><circle cx="18" cy="-58" r="8" fill="${hair}"/><circle cx="0" cy="-79" r="9" fill="${hair}"/>`;
+  if(hs===2)hairSvg=`<path d="M-19,-63a19,19 0 0 1 38,0z" fill="${hair}"/><path d="M-19,-60q-9,28-3,44q7,-16 6,-32z" fill="${hair}"/><path d="M19,-60q9,28 3,44q-7,-16-6,-32z" fill="${hair}"/>`;
+  if(hs===3)hairSvg=`<path d="M-19,-63a19,19 0 0 1 38,0z" fill="${hair}"/><rect x="-26" y="-60" width="8" height="30" rx="4" fill="${hair}"/><rect x="18" y="-60" width="8" height="30" rx="4" fill="${hair}"/><circle cx="-22" cy="-28" r="5" fill="#ffd23f"/><circle cx="22" cy="-28" r="5" fill="#ffd23f"/>`;
+  const eyes=face==='sad'
+    ?`<path d="M-10,-60q4,-4 8,0" stroke="#20242c" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M2,-60q4,-4 8,0" stroke="#20242c" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+    :`<circle cx="-6" cy="-61" r="2.8" fill="#20242c"/><circle cx="6" cy="-61" r="2.8" fill="#20242c"/><circle cx="-5" cy="-62" r="1" fill="#fff"/>`;
+  const mouth=face==='sad'
+    ?`<path d="M-5,-50q5,-5 10,0" stroke="#20242c" stroke-width="2.2" fill="none" stroke-linecap="round"/>`
+    :`<path d="M-6,-52q6,8 12,0" stroke="#20242c" stroke-width="2.2" fill="none" stroke-linecap="round"/>`;
+  const armL=arm===1?`<path d="M-16,-46q-14,-8-16,-22" stroke="${shirt}" stroke-width="8.5" fill="none" stroke-linecap="round"/><circle cx="-32" cy="-70" r="5.5" fill="${skin}"/>`
+                     :`<path d="M-16,-46q-9,8-8,18" stroke="${shirt}" stroke-width="8.5" fill="none" stroke-linecap="round"/><circle cx="-24" cy="-27" r="5.5" fill="${skin}"/>`;
+  const armR=arm===2?`<path d="M16,-46q14,-8 16,-22" stroke="${shirt}" stroke-width="8.5" fill="none" stroke-linecap="round"/><circle cx="32" cy="-70" r="5.5" fill="${skin}"/>`
+                     :`<path d="M16,-46q9,8 8,18" stroke="${shirt}" stroke-width="8.5" fill="none" stroke-linecap="round"/><circle cx="24" cy="-27" r="5.5" fill="${skin}"/>`;
+  return `<g transform="translate(${x},${y}) scale(${s})">
+   <ellipse cx="0" cy="3" rx="22" ry="4.5" fill="#0b1730" opacity=".13"/>
+   <rect x="-13" y="-32" width="10.5" height="33" rx="5" fill="${pants}"/><rect x="2.5" y="-32" width="10.5" height="33" rx="5" fill="${pants}"/>
+   <ellipse cx="-8" cy="1" rx="7.5" ry="4.2" fill="#20242c"/><ellipse cx="8" cy="1" rx="7.5" ry="4.2" fill="#20242c"/>
+   <rect x="-17.5" y="-53" width="35" height="27" rx="12" fill="${shirt}"/>
+   ${armL}${armR}
+   <circle cx="0" cy="-65" r="19" fill="${skin}"/>
+   <ellipse cx="-13" cy="-58" rx="3.4" ry="2.4" fill="#ff9f9f" opacity=".45"/><ellipse cx="13" cy="-58" rx="3.4" ry="2.4" fill="#ff9f9f" opacity=".45"/>
+   ${hairSvg}${eyes}${mouth}</g>`;
+}
+function phone(x,y,s,screen){
+  return `<g transform="translate(${x},${y}) scale(${s})">
+   <rect x="-32" y="-58" width="64" height="116" rx="13" fill="#1b2440"/>
+   <rect x="-27" y="-51" width="54" height="102" rx="8" fill="${screen||'#eaf2ff'}"/>
+   <rect x="-8" y="-56" width="16" height="3.4" rx="1.7" fill="#39456b"/>
+  </g>`;
+}
+const ART={};
+ART.logo=`<svg viewBox="0 0 100 100"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4cc9f0"/><stop offset="1" stop-color="#17c3b2"/></linearGradient></defs>
+<path d="M50 6l36 13v27c0 24-16 40-36 48C30 86 14 70 14 46V19z" fill="url(#lg)" stroke="#0d1830" stroke-width="4"/>
+<circle cx="50" cy="42" r="15" fill="#fff"/><circle cx="45" cy="40" r="4" fill="#12203a"/><circle cx="55" cy="40" r="4" fill="#12203a"/>
+<path d="M43 48q7 7 14 0" stroke="#12203a" stroke-width="3.4" fill="none" stroke-linecap="round"/>
+<rect x="46" y="20" width="8" height="9" rx="4" fill="#ffd23f"/><circle cx="50" cy="17" r="5" fill="#ff6b6b" stroke="#0d1830" stroke-width="2.5"/></svg>`;
+
+ART.hero=`<svg viewBox="0 0 620 330" class="illus">
+<defs><linearGradient id="hb" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#dff6ff"/><stop offset="1" stop-color="#ffeef0"/></linearGradient>
+<linearGradient id="hs" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#4cc9f0"/><stop offset="1" stop-color="#17c3b2"/></linearGradient></defs>
+<rect width="620" height="330" rx="18" fill="url(#hb)"/>
+<g opacity=".5" stroke="#7f9ec9" stroke-width="2" fill="none">
+<path d="M60 60 L160 40 L260 90 L380 50 L500 100 L580 60"/><circle cx="60" cy="60" r="6" fill="#8b5cf6" stroke="none"/><circle cx="160" cy="40" r="6" fill="#ff6b6b" stroke="none"/><circle cx="260" cy="90" r="6" fill="#17c3b2" stroke="none"/><circle cx="380" cy="50" r="6" fill="#ffd23f" stroke="none"/><circle cx="500" cy="100" r="6" fill="#4cc9f0" stroke="none"/><circle cx="580" cy="60" r="6" fill="#8b5cf6" stroke="none"/></g>
+<g transform="translate(310,175)">
+ <path d="M0,-72l62,22v40c0,42-28,68-62,82c-34,-14-62,-40-62,-82v-40z" fill="url(#hs)" stroke="#0d1830" stroke-width="5"/>
+ <path d="M-26,-4l18,20l36,-40" stroke="#fff" stroke-width="11" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+${kid(120,290,1.5,{skin:'#8d5524',hair:'#1a1109',shirt:'#ff6b6b',hairStyle:1,arm:2})}
+${kid(200,300,1.35,{skin:'#f6d0ab',hair:'#5b3a1e',shirt:'#8b5cf6',hairStyle:2})}
+${kid(430,300,1.35,{skin:'#c68863',hair:'#12100e',shirt:'#ffd23f',hairStyle:3,arm:1})}
+${kid(510,290,1.5,{skin:'#f2c29b',hair:'#2b1c14',shirt:'#17c3b2',hairStyle:0})}
+<g transform="translate(155,215)">${phone(0,0,.62,'#ffe9a8')}</g>
+<g transform="translate(470,215)">${phone(0,0,.62,'#dff6ff')}</g>
+<g transform="translate(300,52)" font-family="Fredoka" font-size="26" fill="#12203a" text-anchor="middle"></g>
+<circle cx="80" cy="230" r="16" fill="#ffd23f" opacity=".55"/><circle cx="555" cy="200" r="22" fill="#17c3b2" opacity=".35"/>
+</svg>`;
+
+ART.robot=`<svg viewBox="0 0 220 230" class="illus">
+<defs><linearGradient id="rb" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fe3f5"/><stop offset="1" stop-color="#12a594"/></linearGradient></defs>
+<ellipse cx="110" cy="215" rx="55" ry="9" fill="#0d1830" opacity=".14"/>
+<line x1="110" y1="26" x2="110" y2="46" stroke="#8fa6c9" stroke-width="5"/>
+<path d="M110 12c6 0 11 5 11 11s-11 17-11 17s-11-11-11-17s5-11 11-11z" fill="#ff6b6b" stroke="#0d1830" stroke-width="3"/>
+<rect x="52" y="44" width="116" height="92" rx="30" fill="url(#rb)" stroke="#0d1830" stroke-width="4"/>
+<rect x="42" y="72" width="14" height="30" rx="7" fill="#ffd23f" stroke="#0d1830" stroke-width="3"/>
+<rect x="164" y="72" width="14" height="30" rx="7" fill="#ffd23f" stroke="#0d1830" stroke-width="3"/>
+<rect x="68" y="62" width="84" height="46" rx="16" fill="#0d1830"/>
+<circle cx="94" cy="85" r="10" fill="#4cc9f0"/><circle cx="126" cy="85" r="10" fill="#4cc9f0"/>
+<circle cx="97" cy="82" r="3.4" fill="#fff"/><circle cx="129" cy="82" r="3.4" fill="#fff"/>
+<path d="M96 118q14 12 28 0" stroke="#0d1830" stroke-width="4" fill="none" stroke-linecap="round"/>
+<rect x="66" y="136" width="88" height="60" rx="22" fill="#ffd23f" stroke="#0d1830" stroke-width="4"/>
+<path d="M110 148l22 8v14c0 15-10 24-22 29c-12-5-22-14-22-29v-14z" fill="#17c3b2" stroke="#0d1830" stroke-width="3.4"/>
+<path d="M100 172l7 8l14-15" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>
+<rect x="34" y="140" width="18" height="46" rx="9" fill="url(#rb)" stroke="#0d1830" stroke-width="3.4" transform="rotate(14 43 163)"/>
+<rect x="168" y="140" width="18" height="46" rx="9" fill="url(#rb)" stroke="#0d1830" stroke-width="3.4" transform="rotate(-14 177 163)"/>
+<rect x="78" y="194" width="20" height="16" rx="7" fill="#8fa6c9" stroke="#0d1830" stroke-width="3"/>
+<rect x="122" y="194" width="20" height="16" rx="7" fill="#8fa6c9" stroke="#0d1830" stroke-width="3"/>
+</svg>`;
+
+ART.phoneZones=`<svg viewBox="0 0 420 400" class="illus">
+<defs><linearGradient id="pf" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2b3a5e"/><stop offset="1" stop-color="#151f38"/></linearGradient></defs>
+<rect x="0" y="0" width="420" height="400" rx="16" fill="#f6faff"/>
+<rect x="120" y="16" width="180" height="368" rx="26" fill="url(#pf)" stroke="#0d1830" stroke-width="3"/>
+<rect x="130" y="28" width="160" height="344" rx="18" fill="#ffffff"/>
+<rect x="130" y="28" width="160" height="40" rx="18" fill="#17c3b2"/>
+<rect x="130" y="52" width="160" height="16" fill="#17c3b2"/>
+<circle cx="148" cy="48" r="7" fill="#fff" opacity=".85"/><rect x="162" y="44" width="60" height="8" rx="4" fill="#fff" opacity=".85"/>
+<circle cx="270" cy="48" r="5" fill="#ff6b6b"/><rect x="238" y="44" width="20" height="8" rx="4" fill="#fff" opacity=".7"/>
+<g>
+ <rect x="140" y="80" width="140" height="86" rx="10" fill="#fff8e1" stroke="#f0d98a"/>
+ <circle cx="156" cy="96" r="9" fill="#ffd23f"/><rect x="172" y="91" width="56" height="8" rx="4" fill="#d8c48a"/>
+ <rect x="148" y="112" width="124" height="34" rx="6" fill="#ffe9a8"/>
+ <path d="M152 156c0-4 6-6 8-2c2-4 8-2 8 2c0 4-8 8-8 8s-8-4-8-8z" fill="#ff6b6b"/>
+ <rect x="176" y="152" width="40" height="7" rx="3.5" fill="#e6d3a3"/>
+</g>
+<g>
+ <rect x="140" y="176" width="140" height="86" rx="10" fill="#eef7ff" stroke="#bcd9f2"/>
+ <circle cx="156" cy="192" r="9" fill="#4cc9f0"/><rect x="172" y="187" width="48" height="8" rx="4" fill="#a9c8e6"/>
+ <rect x="148" y="208" width="124" height="34" rx="6" fill="#d8ecff"/>
+ <path d="M152 252c0-4 6-6 8-2c2-4 8-2 8 2c0 4-8 8-8 8s-8-4-8-8z" fill="#ff6b6b"/>
+ <rect x="176" y="248" width="40" height="7" rx="3.5" fill="#a9c8e6"/>
+</g>
+<rect x="140" y="272" width="140" height="46" rx="10" fill="#f2f6fd" stroke="#d7e2f4" stroke-dasharray="5 4"/>
+<circle cx="164" cy="295" r="10" fill="#c9d8ee"/><circle cx="192" cy="295" r="10" fill="#c9d8ee"/><circle cx="220" cy="295" r="10" fill="#ff6b6b"/><circle cx="248" cy="295" r="10" fill="#c9d8ee"/>
+<rect x="130" y="328" width="160" height="44" rx="14" fill="#ff6b6b"/>
+<g fill="#fff"><circle cx="158" cy="346" r="8"/><circle cx="196" cy="346" r="8"/><circle cx="234" cy="346" r="8"/><circle cx="272" cy="346" r="8"/>
+<rect x="150" y="358" width="16" height="5" rx="2.5"/><rect x="188" y="358" width="16" height="5" rx="2.5"/><rect x="226" y="358" width="16" height="5" rx="2.5"/><rect x="264" y="358" width="16" height="5" rx="2.5"/></g>
+<g font-family="Fredoka" font-size="14" fill="#12203a">
+ <path d="M118 48 L46 48" stroke="#17c3b2" stroke-width="4" stroke-dasharray="7 5" fill="none"/><circle cx="40" cy="48" r="17" fill="#17c3b2"/><text x="40" y="53" text-anchor="middle" fill="#fff" font-size="15">1</text>
+ <path d="M118 170 L46 170" stroke="#ffd23f" stroke-width="4" stroke-dasharray="7 5" fill="none"/><circle cx="40" cy="170" r="17" fill="#e0b31f"/><text x="40" y="175" text-anchor="middle" fill="#fff" font-size="15">2</text>
+ <path d="M118 350 L46 350" stroke="#ff6b6b" stroke-width="4" stroke-dasharray="7 5" fill="none"/><circle cx="40" cy="350" r="17" fill="#ff6b6b"/><text x="40" y="355" text-anchor="middle" fill="#fff" font-size="15">3</text>
+ <path d="M302 120 L370 100" stroke="#8b5cf6" stroke-width="4" stroke-dasharray="7 5" fill="none"/><circle cx="380" cy="96" r="16" fill="#8b5cf6"/><text x="380" y="101" text-anchor="middle" fill="#fff" font-size="14">♥</text>
+ <path d="M302 300 L370 300" stroke="#8b5cf6" stroke-width="4" stroke-dasharray="7 5" fill="none"/><circle cx="380" cy="300" r="16" fill="#8b5cf6"/><text x="380" y="305" text-anchor="middle" fill="#fff" font-size="13">👁</text>
+</g>
+<g transform="translate(352,200)"><circle r="26" fill="#fff" stroke="#c9d8ee" stroke-width="3"/><circle r="11" fill="none" stroke="#8b5cf6" stroke-width="4"/><line x1="8" y1="8" x2="20" y2="20" stroke="#8b5cf6" stroke-width="5" stroke-linecap="round"/></g>
+</svg>`;
+
+ART.algo=`<svg viewBox="0 0 460 300" class="illus">
+<rect width="460" height="300" rx="16" fill="#f6faff"/>
+<rect x="40" y="70" width="180" height="150" rx="20" fill="#2b3a5e" stroke="#0d1830" stroke-width="4"/>
+<rect x="56" y="86" width="148" height="80" rx="10" fill="#0d1830"/>
+<circle cx="94" cy="122" r="13" fill="#4cc9f0"/><circle cx="146" cy="122" r="13" fill="#4cc9f0"/>
+<circle cx="98" cy="118" r="4" fill="#fff"/><circle cx="150" cy="118" r="4" fill="#fff"/>
+<path d="M104 146q16 12 32 0" stroke="#4cc9f0" stroke-width="4" fill="none" stroke-linecap="round"/>
+<g transform="translate(60,180)"><circle r="18" fill="#ffd23f" stroke="#0d1830" stroke-width="3"/><g stroke="#0d1830" stroke-width="3"><line x1="0" y1="-24" x2="0" y2="-16"/><line x1="0" y1="16" x2="0" y2="24"/><line x1="-24" y1="0" x2="-16" y2="0"/><line x1="16" y1="0" x2="24" y2="0"/></g><circle r="6" fill="#0d1830"/></g>
+<g transform="translate(196,190)"><circle r="14" fill="#ff6b6b" stroke="#0d1830" stroke-width="3"/><circle r="5" fill="#0d1830"/></g>
+<rect x="70" y="212" width="120" height="24" rx="8" fill="#17c3b2"/>
+<g stroke="#8fa6c9" stroke-width="6" stroke-linecap="round"><line x1="30" y1="252" x2="430" y2="252"/></g>
+<g>
+<rect x="240" y="200" width="42" height="52" rx="8" fill="#fff" stroke="#c9d8ee" stroke-width="3"/><circle cx="261" cy="218" r="8" fill="#ffd23f"/><rect x="248" y="232" width="26" height="6" rx="3" fill="#dbe6f7"/>
+<rect x="300" y="200" width="42" height="52" rx="8" fill="#fff" stroke="#c9d8ee" stroke-width="3"/><circle cx="321" cy="218" r="8" fill="#ff6b6b"/><rect x="308" y="232" width="26" height="6" rx="3" fill="#dbe6f7"/>
+<rect x="360" y="200" width="42" height="52" rx="8" fill="#fff" stroke="#c9d8ee" stroke-width="3"/><circle cx="381" cy="218" r="8" fill="#17c3b2"/><rect x="368" y="232" width="26" height="6" rx="3" fill="#dbe6f7"/>
+</g>
+<path d="M226 130 q60 -30 130 40" stroke="#8b5cf6" stroke-width="5" fill="none" stroke-dasharray="10 7"/>
+<polygon points="356,166 372,178 352,182" fill="#8b5cf6"/>
+<g transform="translate(392,110)">${phone(0,0,.85,'#ffe9a8')}</g>
+<g font-family="Fredoka" font-size="15" fill="#12203a"><text x="40" y="52">ROBOT RECOMENDADOR</text><text x="250" y="180" fill="#8b5cf6">elige qué ves</text></g>
+</svg>`;
+
+ART.funnel=`<svg viewBox="0 0 460 320" class="illus">
+<rect width="460" height="320" rx="16" fill="#f6faff"/>
+<g>
+<path d="M120 40h220l-62 92v92l-96 0v-92z" fill="#dff6ff" stroke="#0d1830" stroke-width="4" stroke-linejoin="round"/>
+<rect x="132" y="52" width="196" height="26" fill="#ff6b6b" opacity=".85"/>
+<rect x="150" y="82" width="160" height="24" fill="#ffd23f" opacity=".9"/>
+<rect x="176" y="110" width="108" height="20" fill="#4cc9f0" opacity=".9"/>
+<rect x="196" y="134" width="68" height="18" fill="#17c3b2"/>
+</g>
+<g stroke="#0d1830" stroke-width="3">
+<circle cx="150" cy="26" r="10" fill="#ff6b6b"/><rect x="186" y="14" width="22" height="22" rx="5" fill="#ffd23f"/>
+<path d="M240 14h24v24h-24z" fill="#4cc9f0"/><circle cx="300" cy="26" r="11" fill="#8b5cf6"/>
+</g>
+<path d="M230 226v30" stroke="#0d1830" stroke-width="4" stroke-dasharray="6 5"/>
+<g transform="translate(230,282)">
+<rect x="-40" y="-26" width="80" height="52" rx="12" fill="#17c3b2" stroke="#0d1830" stroke-width="4"/>
+<path d="M-14 -26v-10a14 14 0 0 1 28 0v10" fill="none" stroke="#0d1830" stroke-width="5"/>
+<circle cx="0" cy="-2" r="7" fill="#fff"/><rect x="-3" y="2" width="6" height="12" rx="3" fill="#fff"/>
+</g>
+<g transform="translate(70,240)">${kid(0,60,1.15,{skin:'#c68863',hair:'#12100e',shirt:'#8b5cf6',hairStyle:1})}</g>
+<g transform="translate(392,236)">${kid(0,60,1.1,{skin:'#f6d0ab',hair:'#5b3a1e',shirt:'#ff6b6b',hairStyle:2,arm:2})}</g>
+<g font-family="Fredoka" font-size="13" fill="#fff" text-anchor="middle">
+<text x="230" y="70">PÚBLICO</text><text x="230" y="99" fill="#3a2c00">SEGUIDORES</text><text x="230" y="125" fill="#08323c">AMIGOS</text><text x="230" y="148" fill="#04231f">SOLO YO</text>
+</g>
+<text x="230" y="20" font-family="Fredoka" font-size="15" fill="#12203a" text-anchor="middle">TODOS TUS DATOS</text>
+</svg>`;
+
+ART.bully=`<svg viewBox="0 0 520 300" class="illus">
+<rect width="520" height="300" rx="16" fill="#f6faff"/>
+<rect x="10" y="10" width="245" height="280" rx="14" fill="#eef2fb"/>
+<rect x="265" y="10" width="245" height="280" rx="14" fill="#e6fbf5"/>
+<g transform="translate(132,240)">${kid(0,0,1.5,{skin:'#f2c29b',hair:'#2b1c14',shirt:'#4cc9f0',hairStyle:0,face:'sad'})}</g>
+<g transform="translate(60,200)">${phone(0,0,.7,'#ffd9d9')}</g>
+<g font-family="Fredoka" font-size="13">
+<path d="M96 96q-24 -12 -6 22z" fill="#3a4a6b"/><rect x="40" y="60" width="86" height="34" rx="12" fill="#3a4a6b"/><text x="83" y="82" fill="#fff" text-anchor="middle">😠 💢</text>
+<rect x="140" y="40" width="86" height="34" rx="12" fill="#5a3a4a"/><text x="183" y="62" fill="#fff" text-anchor="middle">🚫 👎</text>
+<path d="M205 120l14 -14l14 14l-14 14z" fill="#ff6b6b"/>
+</g>
+<g transform="translate(388,240)">${kid(0,0,1.5,{skin:'#f2c29b',hair:'#2b1c14',shirt:'#4cc9f0',hairStyle:0})}</g>
+<g transform="translate(320,246)">${kid(0,0,1.4,{skin:'#8d5524',hair:'#1a1109',shirt:'#ffd23f',hairStyle:1,arm:2})}</g>
+<g transform="translate(462,244)">${kid(0,0,1.3,{skin:'#c68863',hair:'#12100e',shirt:'#17c3b2',hairStyle:3})}</g>
+<g transform="translate(388,90)">
+<path d="M0,-40l36,13v22c0,24-16,38-36,46c-20,-8-36,-22-36,-46v-22z" fill="#17c3b2" stroke="#0d1830" stroke-width="4"/>
+<path d="M-15,-2l11,12l21-23" stroke="#fff" stroke-width="7" fill="none" stroke-linecap="round"/>
+</g>
+<g transform="translate(300,80)"><rect x="-8" y="-40" width="6" height="52" fill="#8fa6c9"/><path d="M-2 -40l36 10l-36 12z" fill="#ff6b6b" stroke="#0d1830" stroke-width="3"/></g>
+<text x="132" y="34" font-family="Fredoka" font-size="16" fill="#c0392b" text-anchor="middle">ASÍ SE SIENTE</text>
+<text x="387" y="34" font-family="Fredoka" font-size="16" fill="#0f9c8e" text-anchor="middle">ASÍ SE ACTÚA</text>
+</svg>`;
+
+ART.bubble=`<svg viewBox="0 0 480 320" class="illus">
+<rect width="480" height="320" rx="16" fill="#f6faff"/>
+<circle cx="60" cy="52" r="26" fill="#ffd23f"/>
+<g stroke="#ffd23f" stroke-width="4" stroke-linecap="round"><line x1="60" y1="12" x2="60" y2="22"/><line x1="20" y1="52" x2="30" y2="52"/><line x1="32" y1="24" x2="39" y2="31"/></g>
+<path d="M0 250q60 -40 120 0t120 0t120 0t120 0v70H0z" fill="#d9f2e6"/>
+<g transform="translate(52,262)">${kid(0,0,.9,{skin:'#8d5524',hair:'#1a1109',shirt:'#ff6b6b',hairStyle:1})}</g>
+<g transform="translate(104,268)">${kid(0,0,.85,{skin:'#f6d0ab',hair:'#5b3a1e',shirt:'#8b5cf6',hairStyle:2})}</g>
+<rect x="130" y="216" width="30" height="40" rx="4" fill="#c9a227"/>
+<g transform="translate(420,262)">${kid(0,0,.9,{skin:'#c68863',hair:'#12100e',shirt:'#17c3b2',hairStyle:3,arm:1})}</g>
+<g transform="translate(250,150)">
+<circle r="98" fill="#dff6ff" opacity=".55" stroke="#4cc9f0" stroke-width="4"/>
+${kid(0,72,1.25,{skin:'#f2c29b',hair:'#2b1c14',shirt:'#4cc9f0',hairStyle:0})}
+<g transform="translate(-58,-38)">${phone(0,0,.5,'#ffe9a8')}</g>
+<g transform="translate(0,-52)">${phone(0,0,.5,'#ffe9a8')}</g>
+<g transform="translate(58,-38)">${phone(0,0,.5,'#ffe9a8')}</g>
+<g fill="#ff6b6b" font-family="Fredoka" font-size="16" text-anchor="middle"><text x="-58" y="-8">♥</text><text x="0" y="-22">♥</text><text x="58" y="-8">♥</text></g>
+</g>
+<g font-family="Fredoka" font-size="14" fill="#12203a"><text x="250" y="36" text-anchor="middle">DENTRO DE LA BURBUJA: TODO IGUAL</text><text x="70" y="300" text-anchor="middle">FUERA: EL MUNDO REAL</text></g>
+</svg>`;
+
+ART.viral=`<svg viewBox="0 0 520 300" class="illus">
+<rect width="520" height="300" rx="16" fill="#f6faff"/>
+<g transform="translate(66,180) rotate(-24)">${phone(0,0,1,'#ffd9d9')}</g>
+<g transform="translate(96,110)"><path d="M0 0l54 -22v44z" fill="#ff6b6b" stroke="#0d1830" stroke-width="3.4"/><rect x="-18" y="-14" width="20" height="28" rx="6" fill="#2b3a5e" stroke="#0d1830" stroke-width="3.4"/></g>
+<g transform="translate(190,84) rotate(12)">
+<rect x="-26" y="-18" width="52" height="36" rx="4" fill="#fff" stroke="#0d1830" stroke-width="3"/>
+<path d="M-26 -18l26 20l26 -20" fill="none" stroke="#ff6b6b" stroke-width="3"/>
+</g>
+<path d="M230 96q60 -40 120 0" stroke="#8b5cf6" stroke-width="4" fill="none" stroke-dasharray="9 6"/>
+<polygon points="352,92 366,102 348,108" fill="#8b5cf6"/>
+<g transform="translate(250,220)">${kid(0,0,1,{skin:'#f6d0ab',hair:'#5b3a1e',shirt:'#8b5cf6',hairStyle:2,arm:1})}</g>
+<g transform="translate(330,230)">${kid(0,0,1,{skin:'#8d5524',hair:'#1a1109',shirt:'#ffd23f',hairStyle:1,arm:1})}</g>
+<g transform="translate(410,220)">${kid(0,0,1,{skin:'#c68863',hair:'#12100e',shirt:'#ff6b6b',hairStyle:3})}</g>
+<g transform="translate(474,150)">
+<circle r="26" fill="#fff" stroke="#0d1830" stroke-width="4"/><circle r="16" fill="none" stroke="#4cc9f0" stroke-width="5"/>
+<line x1="12" y1="12" x2="30" y2="30" stroke="#0d1830" stroke-width="6" stroke-linecap="round"/>
+</g>
+<g font-family="Fredoka" font-size="20" fill="#12203a"><text x="212" y="52">💥</text><text x="286" y="40">💥</text><text x="352" y="56">💥</text></g>
+<text x="250" y="284" font-family="Fredoka" font-size="14" fill="#12203a" text-anchor="middle">Cadena de reenvíos: ¿quién lo verificó?</text>
+</svg>`;
+
+ART.scroll=`<svg viewBox="0 0 460 300" class="illus">
+<rect width="460" height="300" rx="16" fill="#f6faff"/>
+<g transform="translate(230,150)">
+<rect x="-110" y="-96" width="220" height="192" rx="10" fill="#fffdf3" stroke="#d4c48a" stroke-width="3"/>
+<ellipse cx="0" cy="-96" rx="118" ry="14" fill="#f0e2b6" stroke="#c9b478" stroke-width="3"/>
+<ellipse cx="0" cy="96" rx="118" ry="14" fill="#f0e2b6" stroke="#c9b478" stroke-width="3"/>
+<g stroke="#c9d3e6" stroke-width="6" stroke-linecap="round">
+<line x1="-84" y1="-62" x2="84" y2="-62"/><line x1="-84" y1="-42" x2="60" y2="-42"/><line x1="-84" y1="-22" x2="84" y2="-22"/>
+<line x1="-84" y1="-2" x2="40" y2="-2"/><line x1="-84" y1="18" x2="84" y2="18"/></g>
+<g transform="translate(-58,52)"><rect x="-14" y="-14" width="28" height="28" rx="6" fill="#fff" stroke="#17c3b2" stroke-width="4"/><path d="M-7 0l5 6l10 -12" stroke="#17c3b2" stroke-width="5" fill="none" stroke-linecap="round"/></g>
+<text x="10" y="60" font-family="Fredoka" font-size="18" fill="#0f9c8e">ACEPTAR</text>
+<g transform="translate(74,-40) rotate(14)"><rect x="-30" y="-14" width="60" height="28" rx="6" fill="#ff6b6b" stroke="#0d1830" stroke-width="3"/><text x="0" y="6" font-family="Fredoka" font-size="13" fill="#fff" text-anchor="middle">Términos</text></g>
+</g>
+<g transform="translate(96,190)"><circle r="34" fill="#fff" stroke="#0d1830" stroke-width="5"/><circle r="22" fill="none" stroke="#8b5cf6" stroke-width="6"/><line x1="16" y1="16" x2="42" y2="42" stroke="#0d1830" stroke-width="8" stroke-linecap="round"/></g>
+<g transform="translate(392,258) scale(.62)">${ART.robot.replace(/<\/?svg[^>]*>/g,'')}</g>
+<g opacity=".8"><circle cx="60" cy="52" r="9" fill="#ffd23f"/><circle cx="404" cy="46" r="9" fill="#4cc9f0"/><circle cx="42" cy="250" r="7" fill="#ff6b6b"/></g>
+</svg>`;
+
+ART.foot=`<svg viewBox="0 0 520 260" class="illus">
+<rect width="520" height="260" rx="16" fill="#f6faff"/>
+<path d="M20 210q120 -60 220 -20t260 -60" stroke="#c9d8ee" stroke-width="6" fill="none" stroke-dasharray="12 10"/>
+<g>
+<g transform="translate(60,196) rotate(-12)"><ellipse rx="20" ry="26" fill="#17c3b2" opacity=".85"/><g fill="#fff"><circle cx="-5" cy="-6" r="4"/><rect x="2" y="-8" width="8" height="8" rx="2"/></g></g>
+<g transform="translate(150,170) rotate(-8)"><ellipse rx="20" ry="26" fill="#4cc9f0" opacity=".9"/><path d="M-6 4c0-5 6-8 8-3c2-5 8-3 8 3c0 5-8 9-8 9s-8-4-8-9z" fill="#fff"/></g>
+<g transform="translate(244,178) rotate(4)"><ellipse rx="20" ry="26" fill="#ffd23f" opacity=".95"/><rect x="-8" y="-8" width="16" height="14" rx="3" fill="#fff"/><polygon points="1,-4 6,-1 1,2" fill="#e0b31f"/></g>
+<g transform="translate(336,150) rotate(-6)"><ellipse rx="20" ry="26" fill="#8b5cf6" opacity=".9"/><path d="M-8 -6h16v10h-8l-5 5v-5h-3z" fill="#fff"/></g>
+<g transform="translate(424,124) rotate(8)"><ellipse rx="20" ry="26" fill="#ff6b6b" opacity=".9"/><circle cx="0" cy="-1" r="6" fill="#fff"/><path d="M0 -12v6" stroke="#fff" stroke-width="3"/></g>
+</g>
+<g transform="translate(486,88)"><rect x="-24" y="-40" width="48" height="66" rx="8" fill="#c9a227" stroke="#0d1830" stroke-width="3"/><circle cx="0" cy="-8" r="6" fill="#ffd23f"/><path d="M-16 -40h32l-6 -14h-20z" fill="#12203a"/><rect x="-24" y="-44" width="48" height="6" rx="3" fill="#12203a"/></g>
+<g transform="translate(46,226)">${kid(0,0,.85,{skin:'#f2c29b',hair:'#2b1c14',shirt:'#ff6b6b',hairStyle:0})}</g>
+<text x="250" y="34" font-family="Fredoka" font-size="16" fill="#12203a" text-anchor="middle">Cada paso deja una huella que NO se borra</text>
+</svg>`;
+
+ART.medal=`<svg viewBox="0 0 200 200" class="illus">
+<path d="M70 12h22l14 62l-24 12z" fill="#ff6b6b"/><path d="M130 12h-22l-14 62l24 12z" fill="#4cc9f0"/>
+<circle cx="100" cy="120" r="58" fill="#ffd23f" stroke="#0d1830" stroke-width="5"/>
+<circle cx="100" cy="120" r="44" fill="#ffe9a8" stroke="#c99a1c" stroke-width="3"/>
+<path d="M100 88l12 24l26 4l-19 18l5 26l-24 -13l-24 13l5 -26l-19 -18l26 -4z" fill="#ff9f1c" stroke="#0d1830" stroke-width="3" stroke-linejoin="round"/>
+<g fill="#fff"><circle cx="42" cy="56" r="4"/><circle cx="160" cy="70" r="5"/><circle cx="150" cy="176" r="4"/><circle cx="48" cy="168" r="3"/></g>
+</svg>`;
+
+ART.tree=`<svg viewBox="0 0 460 260" class="illus">
+<rect width="460" height="260" rx="16" fill="#f6faff"/>
+<rect x="150" y="14" width="160" height="42" rx="10" fill="#ff6b6b" stroke="#0d1830" stroke-width="3"/>
+<text x="230" y="41" font-family="Fredoka" font-size="14" fill="#fff" text-anchor="middle">CAUSA</text>
+<path d="M230 56v22" stroke="#0d1830" stroke-width="4"/><polygon points="230,88 224,76 236,76" fill="#0d1830"/>
+<rect x="140" y="90" width="180" height="40" rx="10" fill="#ffd23f" stroke="#0d1830" stroke-width="3"/>
+<text x="230" y="115" font-family="Fredoka" font-size="13" fill="#3a2c00" text-anchor="middle">EL ALGORITMO EMPUJA</text>
+<path d="M230 130v20M180 150h100" stroke="#0d1830" stroke-width="4" fill="none"/>
+<path d="M180 150v18M280 150v18" stroke="#0d1830" stroke-width="4"/>
+<polygon points="180,176 174,164 186,164" fill="#0d1830"/><polygon points="280,176 274,164 286,164" fill="#0d1830"/>
+<rect x="100" y="178" width="160" height="42" rx="10" fill="#8b5cf6" stroke="#0d1830" stroke-width="3"/>
+<text x="180" y="204" font-family="Fredoka" font-size="13" fill="#fff" text-anchor="middle">CONSECUENCIA 1</text>
+<rect x="280" y="178" width="160" height="42" rx="10" fill="#2b3a5e" stroke="#0d1830" stroke-width="3"/>
+<text x="360" y="204" font-family="Fredoka" font-size="13" fill="#fff" text-anchor="middle">CONSECUENCIA 2</text>
+<text x="230" y="248" font-family="Fredoka" font-size="14" fill="#12203a" text-anchor="middle">Árbol de impacto: causa → efecto → daño social</text>
+</svg>`;
+$('#logoArt').innerHTML=ART.logo;
+
+/* fondo de estrellas */
+(function(){const c=$('#stars-bg');let h='';for(let i=0;i<70;i++){h+=`<i style="left:${Math.random()*100}%;top:${Math.random()*100}%;animation-delay:${(Math.random()*4).toFixed(2)}s;opacity:${(.2+Math.random()*.6).toFixed(2)}"></i>`}c.innerHTML=h})();
+
+/* =====================================================================
+   CONTENIDO
+   ===================================================================== */
+const MODS=[
+ {n:1,emoji:'🏗️',color:'#17c3b2',title:'El mapa secreto de tus apps',sub:'Arquitectura de plataformas',
+  desc:'Descubre cómo están construidas las redes por dentro y por qué atrapan tu atención.',art:'phone'},
+ {n:2,emoji:'🛡️',color:'#8b5cf6',title:'Palabras que viajan',sub:'Netiqueta y privacidad',
+  desc:'Aprende a comunicarte con respeto y a blindar tu información personal.',art:'funnel'},
+ {n:3,emoji:'🌎',color:'#ff6b6b',title:'La plaza gigante',sub:'Impacto social y cultural',
+  desc:'Cámaras de eco, burbujas, virus de noticias falsas y árboles de impacto.',art:'bubble'},
+ {n:4,emoji:'⚖️',color:'#ffd23f',title:'Tu superpoder ciudadano',sub:'Ética, leyes y proyecto de vida',
+  desc:'Datos, contratos, derechos y tu Decálogo personal de ciudadanía digital.',art:'scroll'}
+];
+
+/* --- Módulo 1: juego del laberinto --- */
+const PAC_QUESTIONS=[
+ {q:'¿Cuál es el "río sin final" que está diseñado para que NO cierres la app?',
+  a:['El feed infinito','El perfil','La barra de batería','El botón de configuración'],
+  ok:0,why:'El feed infinito elimina los puntos de parada naturales: siempre hay algo más abajo. Funciona como una máquina de dulces: a veces sale algo genial, a veces nada… y por eso sigues bajando.'},
+ {q:'¿Quién decide qué ves tú y qué ve tu compañero en el mismo segundo?',
+  a:['El modo oscuro','El algoritmo de recomendación','La memoria del celular','El fondo de pantalla'],
+  ok:1,why:'El algoritmo es un robot matemático que optimiza una sola cosa: que te quedes más tiempo. No tiene ética ni juicio: solo mide clics y segundos.'},
+ {q:'Los anillos de colores de las Historias y las insignias rojas de notificación son…',
+  a:['Puntos de dopamina (retención)','Puntos de fricción','Ajustes de privacidad','Publicidad obligatoria'],
+  ok:0,why:'Son zonas VERDES del mapa: generan urgencia y curiosidad (FOMO = miedo a perderte algo). Tu cerebro pide revisarlas una y otra vez.'},
+ {q:'¿Cuál de estas es una red de MENSAJERÍA CERRADA?',
+  a:['TikTok','LinkedIn','WhatsApp','X (Twitter)'],
+  ok:2,why:'WhatsApp y Telegram son mensajería cerrada: conversaciones privadas y grupos. En Latinoamérica son la infraestructura del comercio, la escuela… y también de los rumores.'},
+ {q:'El botón "Publicar" (que ya no puedes deshacer) es un punto de…',
+  a:['Dopamina','Fricción / decisión','Navegación','Monetización'],
+  ok:1,why:'Es una zona ROJA: una acción irreversible. Sin botón de "editar" la interfaz te empuja a decidir rápido… y el arrepentimiento queda público.'}
+];
+
+/* --- Módulo 1: clasificador de 18 elementos --- */
+const ELEMENTS=[
+ {t:'Botón "Retweet" o "Repost"',p:'X (Twitter)',f:'Interacción',po:['X (Twitter)','WhatsApp','Instagram']},
+ {t:'Feed infinito de videos verticales con autoplay',p:'TikTok',f:'Retención',po:['TikTok','LinkedIn','Telegram']},
+ {t:'Historias que desaparecen en 24 horas',p:'Instagram / WhatsApp',f:'Retención',po:['Instagram / WhatsApp','X (Twitter)','LinkedIn']},
+ {t:'Canales de difusión (uno escribe, muchos leen)',p:'WhatsApp / Telegram',f:'Navegación',po:['WhatsApp / Telegram','TikTok','Instagram']},
+ {t:'Pestaña "Para Ti" (FYP)',p:'TikTok',f:'Retención',po:['TikTok','X (Twitter)','Facebook']},
+ {t:'Hilos de textos encadenados',p:'X (Twitter)',f:'Interacción',po:['X (Twitter)','WhatsApp','TikTok']},
+ {t:'Botón "Comprar" o "Tienda" en el perfil',p:'Instagram',f:'Monetización',po:['Instagram','Telegram','LinkedIn']},
+ {t:'Etiqueta "Patrocinado" en el tercer puesto del feed',p:'Instagram / X',f:'Monetización',po:['Instagram / X','WhatsApp','TikTok']},
+ {t:'Filtro de realidad aumentada en la cámara',p:'TikTok / Snapchat',f:'Retención',po:['TikTok / Snapchat','LinkedIn','WhatsApp']},
+ {t:'Pestaña "Explorar" o la lupa 🔍',p:'Instagram',f:'Navegación',po:['Instagram','Telegram','X (Twitter)']},
+ {t:'Aviso "Escribiendo…" en tiempo real',p:'WhatsApp',f:'Interacción',po:['WhatsApp','LinkedIn','TikTok']},
+ {t:'Botón "No me interesa" / "Silenciar"',p:'TikTok / YouTube',f:'Navegación',po:['TikTok / YouTube','Instagram','WhatsApp']},
+ {t:'Botón "Conectar" y recomendaciones profesionales',p:'LinkedIn',f:'Interacción',po:['LinkedIn','TikTok','WhatsApp']},
+ {t:'Sticker interactivo de encuesta en historias',p:'Instagram',f:'Interacción',po:['Instagram','LinkedIn','Telegram']},
+ {t:'Transmisión en vivo con regalos y monedas',p:'TikTok',f:'Monetización',po:['TikTok','WhatsApp','LinkedIn']},
+ {t:'Marcador / "Guardar" para ver después',p:'Universal (todas)',f:'Navegación',po:['Universal (todas)','Solo WhatsApp','Solo LinkedIn']},
+ {t:'Carrusel de varias fotos que se deslizan',p:'Instagram',f:'Interacción',po:['Instagram','Telegram','X (Twitter)']},
+ {t:'Insignia roja con número en el ícono de la app',p:'Universal (todas)',f:'Retención',po:['Universal (todas)','Solo TikTok','Solo LinkedIn']}
+];
+
+/* --- Módulo 2: tribunal de 12 escenarios --- */
+const CASES=[
+ {s:'Compartes una foto de la fiesta donde aparece un compañero… sin pedirle permiso.',v:'No ético',
+  act:'Pedir permiso antes o difuminar su cara',ao:['Pedir permiso antes o difuminar su cara','Borrar su cuenta de la foto','Subirla solo de noche'],
+  why:'Su imagen también es suya. Publicarla sin consentimiento vulnera su privacidad aunque tu intención no sea mala.'},
+ {s:'Recibes un mensaje de odio anónimo y respondes con insultos todavía peores.',v:'No ético',
+  act:'Bloquear al usuario y reportar el mensaje',ao:['Bloquear al usuario y reportar el mensaje','Responder con más insultos','Publicar su nombre en tu perfil'],
+  why:'Responder escala la violencia y ensucia tu huella digital. Bloquear + reportar + guardar prueba es la jugada profesional.'},
+ {s:'Un adulto configura el perfil de un niño de 9 años como "Público" para conseguir seguidores.',v:'Delito',
+  act:'Cambiar de inmediato a Privado y revisar seguidores',ao:['Cambiar de inmediato a Privado y revisar seguidores','Dejarlo público y ganar seguidores','Poner más fotos del niño'],
+  why:'Exponer a un menor es negligencia grave y en varios países es delito. Los perfiles de menores SIEMPRE van en privado.'},
+ {s:'Copias un texto de un blog y lo publicas en tu red como si lo hubieras escrito tú.',v:'Delito',
+  act:'Citar al autor original y enlazar la fuente',ao:['Citar al autor original y enlazar la fuente','Borrar el nombre del blog','Decir que lo encontraste "por ahí"'],
+  why:'Eso es plagio: robo de propiedad intelectual. Atribuir es ciudadanía; copiar sin crédito rompe la confianza.'},
+ {s:'En el grupo del barrio reenvían un audio sin verificar acusando a un hombre de ser delincuente.',v:'No ético',
+  act:'No reenviar y avisar al grupo que falta verificar',ao:['No reenviar y avisar al grupo que falta verificar','Reenviarlo "por si acaso"','Agregar tu propia teoría'],
+  why:'La difamación viral ha causado linchamientos reales en Latinoamérica. Romper la cadena es un acto de valentía cívica.'},
+ {s:'Alguien crea un perfil falso con la foto de una compañera para burlarse de ella.',v:'Delito',
+  act:'Guardar pruebas, reportar la cuenta y avisar a un adulto',ao:['Guardar pruebas, reportar la cuenta y avisar a un adulto','Reírse y compartir el perfil','Crear otro perfil falso'],
+  why:'Es suplantación de identidad + ciberacoso: delito tipificado. La evidencia (capturas con fecha) es lo que hace que el reporte funcione.'},
+ {s:'Compartes el video de un creador escribiendo su nombre de usuario y el enlace.',v:'Ético',
+  act:'Seguir así: atribución siempre',ao:['Seguir así: atribución siempre','Quitar el nombre para tener más likes','Recortar la marca de agua'],
+  why:'¡Perfecto! Dar crédito fortalece al creador y demuestra integridad intelectual.'},
+ {s:'Subes tu dibujo a tu perfil y lo dejas visible "Solo amigos", revisando la configuración cada mes.',v:'Ético',
+  act:'Mantener la auditoría mensual de privacidad',ao:['Mantener la auditoría mensual de privacidad','Abrirlo a todo el mundo','Compartir tu contraseña con tus amigos'],
+  why:'La privacidad no es un interruptor: es un sistema de esclusas que se revisa periódicamente.'},
+ {s:'Le haces captura a un chat privado de tu mejor amigo y la subes a tu historia.',v:'No ético',
+  act:'Borrarla y pedir disculpas; los chats privados no se publican',ao:['Borrarla y pedir disculpas','Dejarla 24 horas y ya','Pedirle más capturas graciosas'],
+  why:'La confianza rota es difícil de reparar. Lo privado se queda privado, aunque sea "entre amigos".'},
+ {s:'Grabas una pelea en el colegio y la difundes en tu grupo para ganar vistas.',v:'Delito',
+  act:'No difundir: reportar a un adulto y a la plataforma',ao:['No difundir: reportar a un adulto y a la plataforma','Subirla con música de fondo','Etiquetar a los que pelean'],
+  why:'Difundir violencia de menores revictimiza y puede constituir delito. Tu papel es detenerla, no amplificarla.'},
+ {s:'Aceptas la solicitud de un desconocido sin foto, sin amigos en común y con nombre raro.',v:'No ético',
+  act:'Revisar solicitudes una a una y rechazar perfiles falsos',ao:['Revisar solicitudes una a una y rechazar perfiles falsos','Aceptar todos para tener más seguidores','Darle tu WhatsApp'],
+  why:'Muchos perfiles falsos buscan información o ingeniería social. Seguidores no es igual a seguridad.'},
+ {s:'Tienes activada la ubicación en tiempo real visible para todos en tres apps distintas.',v:'No ético',
+  act:'Desactivar permisos de ubicación y usarla solo cuando la app está abierta',ao:['Desactivar permisos de ubicación','Dejarla siempre activa','Compartir también tu dirección'],
+  why:'La ubicación revela tu casa, tu escuela y tus rutinas. Principio de minimización: dar solo lo estrictamente necesario.'}
+];
+
+/* --- Módulo 2: embudo de privacidad --- */
+const PRIV_ITEMS=[
+ {t:'Tu dirección exacta y el nombre de tu colegio',lv:'Solo yo / Privado'},
+ {t:'Tu número de teléfono celular',lv:'Solo yo / Privado'},
+ {t:'Un meme que creaste para vender pulseras hechas por ti',lv:'Público'},
+ {t:'Tu portafolio de dibujos para un concurso nacional',lv:'Público'},
+ {t:'Fotos de tu cumpleaños con tus 6 mejores amigos',lv:'Amigos / Conexiones'},
+ {t:'Fotos de tus primos pequeños (menores de edad)',lv:'Amigos / Conexiones'},
+ {t:'Tu opinión sobre una película, escrita con respeto',lv:'Seguidores aprobados'},
+ {t:'Un borrador de video que aún no terminaste',lv:'Solo yo / Privado'}
+];
+const PRIV_LEVELS=['Público','Seguidores aprobados','Amigos / Conexiones','Solo yo / Privado'];
+
+/* --- Módulo 3: detective --- */
+const DETECTIVE=[
+ {s:'🎙️ Audio de WhatsApp: "Mañana cierran TODOS los colegios por una amenaza". Te lo mandó tu tía.',
+  ok:1,why:'Ningún colegio cierra por un audio anónimo. Busca la fuente oficial (secretaría de educación, cuenta verificada) antes de mover un dedo.'},
+ {s:'🖼️ Foto de un niño enfermo pidiendo una cadena de oración y un número de cuenta bancaria.',
+  ok:1,why:'Muchas de esas fotos son robadas y recicladas hace años. La búsqueda inversa de imágenes revela la verdad en 20 segundos.'},
+ {s:'🎥 Video borroso de un comerciante "robando", grabado desde lejos, sin audio ni contexto.',
+  ok:1,why:'Un video fuera de contexto destruye vidas y negocios locales. Verifica: ¿quién grabó?, ¿cuándo?, ¿qué pasó antes y después?'},
+ {s:'📚 Un estudio de una universidad, con el nombre de la institución y el enlace al documento original.',
+  ok:0,why:'¡Esto sí se comparte! Fuente identificable, institución responsable y enlace verificable. Cita al autor al compartir.'},
+ {s:'🍋 "Toma agua con limón hirviendo y se cura cualquier enfermedad". Cadena de reenvío.',
+  ok:1,why:'La desinformación de salud puede hacer daño real. Contrasta con organismos de salud oficiales antes de reenviar a tu familia.'},
+ {s:'📅 Un video impresionante presentado como "HOY"… pero lo encuentras publicado hace 3 años.',
+  ok:1,why:'Reciclar contenido viejo como nuevo es una técnica clásica de manipulación. Revisa siempre la fecha de publicación original.'},
+ {s:'💸 Anuncio: "Gana $500 al día, solo envíanos tu foto de documento de identidad".',
+  ok:1,why:'Es un intento de robo de identidad. No compartas documentos; reporta el anuncio a la plataforma.'},
+ {s:'🎨 Tutorial de dibujo donde se ve claramente el nombre del creador en la esquina.',
+  ok:0,why:'Compartir con el crédito visible es ético y ayuda al creador. Si lo recortas, se convierte en plagio.'}
+];
+const DET_OPTS=['Compartirlo ya en mis grupos','Pausar 5 segundos y verificar la fuente','Reenviarlo con una burla'];
+
+/* --- Módulo 3: árboles de impacto --- */
+const TREES=[
+ {title:'El video del comerciante',steps:['Alguien graba un video fuera de contexto','El algoritmo lo empuja porque genera indignación','Se viraliza en horas por varias redes','Consecuencia 1: linchamiento digital y amenazas','Consecuencia 2: el negocio cierra por miedo'],
+  lesson:'Sin verificación previa se destruye el tejido económico de un barrio entero.'},
+ {title:'El filtro de belleza',steps:['Una app lanza un filtro que "perfecciona" la cara','Miles de adolescentes lo usan todos los días','Comparan su cara real con la cara filtrada','Consecuencia 1: baja autoestima y ansiedad','Consecuencia 2: dietas y cirugías peligrosas'],
+  lesson:'La estética viral instala estándares imposibles que afectan la salud mental.'},
+ {title:'La noticia falsa electoral',steps:['Se crea una noticia falsa con fuerte carga emocional','Se inyecta en grupos cerrados de mensajería','Salta a redes abiertas y se viraliza','Los medios tradicionales la repiten sin verificar','Consecuencia: la gente decide su voto con datos falsos'],
+  lesson:'La desinformación estructural puede alterar procesos democráticos completos.'}
+];
+
+/* --- Módulo 4: auditoría de permisos --- */
+const PERMS=[
+ {app:'🔦 App de linterna',perm:'Acceso a tu ubicación GPS',ok:false,why:'Una linterna no necesita saber dónde vives. Es el ejemplo clásico de robo de datos: revocar.'},
+ {app:'📚 App de tareas',perm:'Cámara solo mientras la usas',ok:true,why:'Es proporcional: la usas para escanear un ejercicio. Permiso "solo al usar la app" = correcto.'},
+ {app:'🎮 Juego gratis de burbujas',perm:'Leer toda tu lista de contactos',ok:false,why:'No hay ninguna relación entre explotar burbujas y tus contactos. Revocar de inmediato.'},
+ {app:'🏦 App de tu banco',perm:'Reconocimiento facial para entrar',ok:true,why:'Es un dato biométrico usado con fines de seguridad fuertes. Aun así: revisa su política de privacidad.'},
+ {app:'📱 Red social',perm:'Micrófono siempre activo en segundo plano',ok:false,why:'Micrófono permanente = riesgo de escucha y de recolección de datos. Actívalo solo durante la llamada.'},
+ {app:'🗺️ App de mapas',perm:'Ubicación mientras usas la app',ok:true,why:'Necesaria para su función. Configúrala como "solo durante el uso", nunca "siempre".'},
+ {app:'🤔 Test "¿Qué personaje eres?"',perm:'Iniciar sesión con tu red social',ok:false,why:'Ese botón entrega tu perfil, tu correo y tus amigos a un desconocido. Mejor crea una cuenta separada.'},
+ {app:'🖼️ App de edición de fotos',perm:'Acceso a TODA tu galería',ok:true,why:'Aceptable si la app es confiable, pero usa "solo fotos seleccionadas" siempre que exista esa opción.'},
+ {app:'🛵 App de entregas',perm:'Dirección de entrega + teléfono',ok:true,why:'Datos necesarios para el servicio. Activa el número oculto/máscara para no exponer tu línea real.'},
+ {app:'🎵 App de música',perm:'Publicar automáticamente en tu perfil',ok:false,why:'Cesión de derechos de publicación por defecto. Desactívalo: tú decides qué aparece en tu huella digital.'}
+];
+
+/* --- Módulo 4: dilemas --- */
+const DILEMMAS=[
+ {c:'Una app de fotos "gratis" vende tus selfies a empresas de publicidad. Lo dice en la página 14 de su Política de Privacidad, en letra pequeñísima.',
+  qs:[
+   {t:'1) Fallo técnico / normativo',ok:1,opts:['Se violó el diseño de la interfaz','No hubo consentimiento informado real: la cesión de datos estaba oculta','El usuario tuvo la culpa por usar fotos'],
+    why:'El consentimiento informado exige claridad y accesibilidad. Un muro de texto incomprensible NO es consentimiento libre.'},
+   {t:'2) Impacto social',ok:2,opts:['Ninguno: es solo publicidad','Aumenta la velocidad de internet','Rompe la confianza del ecosistema y expone tu rostro (dato biométrico)'],
+    why:'Cuando los usuarios descubren estas prácticas, la confianza en todo el ecosistema digital se deteriora.'},
+   {t:'3) Veredicto ciudadano',ok:0,opts:['Revocar permisos, descargar y borrar mis datos, y solicitar la supresión (derecho al olvido)','Borrar la app y no decir nada','Crear otra cuenta igual'],
+    why:'La soberanía se ejerce: revoca, exporta, suprime y deja constancia por escrito del trámite.'}]},
+ {c:'Un influencer con 2 millones de seguidores usa la ilustración de un artista local sin dar crédito y gana dinero con ella.',
+  qs:[
+   {t:'1) Fallo técnico / normativo',ok:1,opts:['Uso excesivo de datos móviles','Violación de propiedad intelectual y falta de atribución','Error del algoritmo'],
+    why:'Toda creación tiene autor. Usarla sin crédito ni permiso es plagio, aunque sea "solo una imagen".'},
+   {t:'2) Impacto social',ok:0,opts:['El creador pierde ingreso y visibilidad; se normaliza robar trabajo creativo','El influencer pierde seguidores','No pasa nada'],
+    why:'Si robar creatividad sale gratis, los creadores locales desaparecen del ecosistema.'},
+   {t:'3) Veredicto ciudadano',ok:2,opts:['Comentar con insultos','Compartir la imagen sin el nombre del artista','Reportar por derechos de autor, etiquetar al autor original y exigir rectificación'],
+    why:'Los mecanismos de reporte son los tribunales internos de la plataforma: úsalos con pruebas.'}]},
+ {c:'Un grupo de compañeros crea un perfil falso con la foto de una estudiante para burlarse de ella en un grupo de 300 personas.',
+  qs:[
+   {t:'1) Fallo técnico / normativo',ok:2,opts:['Falta de memoria en el celular','Uso incorrecto de hashtags','Violación de normas de la comunidad + delito de suplantación y ciberacoso'],
+    why:'No es "libertad de expresión": es hostigamiento sistemático, tipificado en códigos penales de la región.'},
+   {t:'2) Impacto social',ok:1,opts:['Mejora la convivencia del grupo','Daño emocional grave, ausentismo escolar y riesgo para la salud mental de la víctima','Solo es una broma'],
+    why:'El daño es real y medible. La audiencia masiva multiplica la humillación.'},
+   {t:'3) Veredicto ciudadano',ok:0,opts:['Guardar capturas con fecha, reportar la cuenta, avisar a un adulto de confianza y a la escuela','Salirme del grupo y olvidar','Responder con otro perfil falso'],
+    why:'Evidencia + reporte + adulto de confianza = protocolo efectivo. Nunca respondas con la misma moneda.'}]},
+ {c:'Una plataforma cambia sus Términos: ahora puede usar tus videos para entrenar inteligencia artificial. Solo te avisa con un correo que nadie lee.',
+  qs:[
+   {t:'1) Fallo técnico / normativo',ok:1,opts:['Error de conexión','Contrato de adhesión modificado unilateralmente, con consentimiento por defecto','Falla del servidor'],
+    why:'Los Términos de Servicio son un contrato que tú no negocias: lo aceptas o te vas. Por eso se llaman "de adhesión".'},
+   {t:'2) Impacto social',ok:2,opts:['Los videos se ven mejor','Aumenta la calidad de la red','Tu contenido puede quedar incorporado para siempre en modelos que no controlas'],
+    why:'Ceder contenido para entrenamiento puede ser irreversible: no hay botón de "devolver".'},
+   {t:'3) Veredicto ciudadano',ok:0,opts:['Leer los cambios, descargar mi contenido, ejercer oposición/supresión y decidir si continúo','Ignorar el correo','Subir más videos'],
+    why:'Auditoría + minimización + ejercicio legal: los tres pilares aplicados a un caso real.'}]}
+];
+
+/* --- Decálogo (Módulo 4) --- */
+const DECALOGO=[
+ {m:'Auditarás y minimizarás los permisos de tus aplicaciones cada tres meses.',
+  tec:'Principio de minimización de datos + ajustes del sistema operativo (micrófono, cámara, ubicación).',
+  eti:'Cada permiso de más alimenta un modelo de negocio que se sostiene con tu vida privada.'},
+ {m:'No usarás "Iniciar sesión con mi red social" en aplicaciones de terceros.',
+  tec:'Cesión encadenada de datos: entregas perfil, correo y grafo de amigos a un desconocido.',
+  eti:'Separar identidades protege a tu comunidad: un filtrado no arrastra a todos tus contactos.'},
+ {m:'Verificarás la fuente antes de compartir cualquier información.',
+  tec:'Búsqueda inversa de imágenes, fecha de publicación original y cuenta oficial del emisor.',
+  eti:'Los algoritmos premian la indignación y la velocidad, no la verdad. Reenviar sin leer es complicidad cívica.'},
+ {m:'Pausarás 5 segundos antes de responder cualquier mensaje que te enoje.',
+  tec:'Filtro emocional: evita la escalada y el contenido del que te arrepentirás.',
+  eti:'Lo que escribes queda indexado para siempre; la pausa es tu primer acto de responsabilidad.'},
+ {m:'Atribuirás siempre al autor original de una idea, imagen, video o texto.',
+  tec:'Propiedad intelectual y normas de comunidad de todas las plataformas.',
+  eti:'Atribuir es ciudadanía: defiende el trabajo creativo de tu propio país.'},
+ {m:'No publicarás datos de terceros (fotos, ubicación, chats) sin su consentimiento.',
+  tec:'Derecho a la imagen y a la privacidad; leyes de protección de datos personales.',
+  eti:'El consentimiento ajeno es tan valioso como el tuyo. Especialmente con menores de edad.'},
+ {m:'Configurarás tu perfil con la privacidad más cerrada posible por defecto.',
+  tec:'Las plataformas vienen abiertas para maximizar datos: tú debes forzar el cierre (esclusas).',
+  eti:'Menos superficie expuesta = menos riesgo de ingeniería social, suplantación y acoso.'},
+ {m:'Usarás los mecanismos de reporte y bloqueo sin miedo y con evidencia.',
+  tec:'Centros de ayuda y normas de la comunidad: capturas con fecha y enlace al perfil.',
+  eti:'Reportar protege a la siguiente víctima. El silencio deja al agresor impune.'},
+ {m:'Separarás tus identidades: un correo para trámites y otro para redes y juegos.',
+  tec:'Contención de daños ante filtraciones; autenticación en dos pasos distinta por cuenta.',
+  eti:'Tu vida bancaria, escolar y social no deben caer juntas por un solo error.'},
+ {m:'Recordarás que tu huella digital es tu currículum oculto y cuidarás tu proyecto de vida.',
+  tec:'Todo es público, permanente e indexable: empleadores e instituciones auditan perfiles.',
+  eti:'Hoy construyes la reputación que mañana abrirá (o cerrará) puertas profesionales.'}
+];
+
+/* --- Tablas del taller --- */
+const TABLA1=[
+ ['X (Twitter)','Texto corto / hilos','Retweet, cita, respuesta','Inmediatez, opinión, noticias, debate'],
+ ['Instagram','Imagen / video corto (Reels)','Like, comentario, compartir a historias','Estética, estilo de vida, comercio visual'],
+ ['TikTok','Video vertical corto','Reproducción, duetos, sonidos en tendencia','Entretenimiento, viralidad, tendencias masivas'],
+ ['LinkedIn','Texto profesional / artículos','Recomendar, conectar, comentario técnico','Red de contactos, negocios, marca personal'],
+ ['WhatsApp','Mensajería cerrada / grupos','Reenviar, responder, reacciones','Comunicación privada, micro-comunidades']];
+const TABLA2=[
+ ['Público','Cualquier usuario y los buscadores','MÁXIMO: indexable y reutilizable','Úsalo solo para marca personal o activismo'],
+ ['Seguidores aprobados','Solo quien pidió acceso y fue aceptado','MEDIO: captura de pantalla de "seguidores"','Revisa solicitudes una a una; no aceptes perfiles falsos'],
+ ['Amigos / conexiones','Solo contactos directos verificados','MEDIO-BAJO: ingeniería social si la lista es pública','Oculta tu lista de amigos en la configuración'],
+ ['Privado / Solo yo','Nadie más que tú','MÍNIMO (riesgo de hackeo o suplantación)','Borradores, datos sensibles, archivos personales']];
+const TABLA3=[
+ ['Periodismo','Inmediatez, denuncia ciudadana, acceso a fuentes directas','Polarización, muerte de la investigación, fake news','Bulos sobre brotes de salud difundidos por WhatsApp en Brasil'],
+ ['Activismo','Convocatoria masiva, visibilidad de minorías, presión social','Slacktivismo, linchamientos digitales, rastreo y represión','Movimientos estudiantiles en Colombia organizados por X e Instagram'],
+ ['Comunidades','Apoyo entre pares, nichos, redes de emprendimiento','Aislamiento físico, burbujas de filtro, radicalización','Grupos de criptoinversión y comunidades de apoyo emocional'],
+ ['Cultura','Democratización de la creación, nuevos artistas','Estándares de belleza irreales, adicción, salud mental','Impacto de los filtros de TikTok en la autoimagen adolescente en México']];
+const TABLA4=[
+ ['1. Minimización','Compartir solo lo estrictamente necesario','No usar "Iniciar sesión con Facebook" en apps de terceros'],
+ ['2. Auditoría','Revisar periódicamente los permisos otorgados','Revocar micrófono, cámara y ubicación en los ajustes'],
+ ['3. Separación','No usar la misma identidad para todo','Un correo para el banco, otro para redes y juegos'],
+ ['4. Verificación','Dudar antes de interactuar o compartir','Usar búsqueda inversa de imágenes antes de reenviar'],
+ ['5. Ejercicio legal','Conocer y usar las leyes de protección de datos','Saber llenar una solicitud de supresión ante la plataforma']];
+
+/* =====================================================================
+   NAVEGACIÓN
+   ===================================================================== */
+let CURRENT={v:'home',mod:1,tab:'learn'};
+let CLEANUP=null;
+function go(v,p){
+  if(CLEANUP){try{CLEANUP()}catch(e){}CLEANUP=null}
+  CURRENT={v:v,mod:(p&&p.mod)||CURRENT.mod,tab:(p&&p.tab)||'learn'};
+  window.scrollTo({top:0,behavior:'smooth'});
+  const view=$('#view');view.innerHTML='';
+  if(v==='home')renderHome(view);
+  else if(v==='module')renderModule(view,CURRENT.mod,CURRENT.tab);
+  else if(v==='diploma')renderDiploma(view);
+  view.classList.remove('pop');void view.offsetWidth;view.classList.add('pop');
+}
+function modProgress(n){
+  const acts=['m'+n+'a','m'+n+'b','mission'+n];
+  let c=0;acts.forEach(k=>{if(S.done[k]||S.missions['m'+n])c++});
+  return Math.round(c/acts.length*100);
+}
+function renderHome(v){
+  const name=S.name||'Guardián';
+  let html=`
+  <section class="hero">
+    <div>
+      <span class="pill" style="background:rgba(255,210,63,.25);color:#ffe9a8;border:1.5px solid rgba(255,210,63,.5)">🎮 Taller-juego · 4 módulos · 8 minijuegos</span>
+      <h1>Hola ${esc(name)},<br>¿listo para ver la Matrix<br>de tus aplicaciones?</h1>
+      <p>Las redes sociales no son solo diversión: son <b>edificios digitales</b> con puertas, pasillos y trampas diseñadas por ingenieros. En este taller aprenderás a leer los planos, a blindar tu información y a convertirte en <b>ciudadano/a digital</b> de verdad.</p>
+      <div class="namebox">
+        <input type="text" id="nameIn" placeholder="Escribe tu nombre de Guardián/a" value="${esc(S.name||'')}" style="max-width:300px">
+        <button class="btn teal" onclick="setName()">Guardar 🛡️</button>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button class="btn" onclick="go('diploma')">🏅 Ver mis logros</button>
+        <button class="btn ghost" onclick="resetAll()">↺ Reiniciar taller</button>
+      </div>
+    </div>
+    <div>${ART.hero}</div>
+  </section>
+  <h2 class="sec f" style="color:#fff;margin-bottom:12px">🗺️ Elige tu módulo</h2>
+  <div class="path">`;
+  MODS.forEach(m=>{
+    const p=modProgress(m.n);
+    html+=`<button class="mod" onclick="go('module',{mod:${m.n},tab:'learn'})">
+      <div class="top" style="background:linear-gradient(140deg,${m.color},${shade(m.color,-35)})">
+        <div class="num">MÓDULO ${m.n}</div><h3>${m.title}</h3>
+        ${ART[m.art==='phone'?'phoneZones':m.art].replace('<svg','<svg style="width:110px;height:110px"')}
+      </div>
+      <div class="body">
+        <p>${m.desc}</p>
+        <div class="row" style="justify-content:space-between">
+          <div><span class="tag">${m.sub}</span></div>
+          <div class="ring" style="--p:${p}"><span>${p}%</span></div>
+        </div>
+      </div></button>`;
+  });
+  html+=`</div>
+  <div class="card dark" style="margin-top:22px">
+    <div class="grid g2" style="align-items:center">
+      <div>
+        <h3 class="f" style="margin:0 0 8px;font-size:22px">🤖 PIX, tu robot guía</h3>
+        <p class="lead" style="margin-bottom:10px">En cada módulo encontrarás: <b>Aprende</b> (teoría con ilustraciones), <b>Juega</b> (retos con estrellas y XP) y <b>Misión</b> (el producto que harás a mano en tu cuaderno, con ayuda de una herramienta para imprimirlo).</p>
+        <div class="box note" style="margin:0"><b>Regla de oro del taller:</b> lo que aprendas aquí también se escribe a mano. Papel, regla y buena letra. 💪</div>
+      </div>
+      <div style="max-width:260px;margin:0 auto">${ART.robot}</div>
+    </div>
+  </div>`;
+  v.innerHTML=html;
+}
+function shade(hex,p){
+  const n=parseInt(hex.slice(1),16);let r=(n>>16)+p,g=(n>>8&255)+p,b=(n&255)+p;
+  r=Math.max(0,Math.min(255,r));g=Math.max(0,Math.min(255,g));b=Math.max(0,Math.min(255,b));
+  return '#'+((1<<24)+(r<<16)+(g<<8)+b).toString(16).slice(1);
+}
+function setName(){const n=$('#nameIn').value.trim();S.name=n||'Guardián';save();toast('¡Hola, '+esc(S.name)+'! 🛡️');sfx.ok()}
+function resetAll(){
+  modal(`<h3 class="f">¿Reiniciar todo el taller?</h3><p class="lead">Se borrarán tus estrellas, tu XP y tus misiones.</p>
+   <div class="row"><button class="btn coral" onclick="S={name:'',xp:0,done:{},missions:{},sound:true,m1:{plats:[],elems:{},tbl:{},text:'',checks:[]},m2:{audit:{},shield:{},order:[],checks:[]},m3:{map:{op:[],de:[],sm:[],co:[]},topic:'',checks:[]},m4:{commit:{},checks:[]};save();paintTop();closeModal();go('home')">Sí, reiniciar</button>
+   <button class="btn ghost" style="background:#e8eefc;color:#12203a" onclick="closeModal()">Cancelar</button></div>`);
+}
+
+/* =====================================================================
+   MÓDULOS
+   ===================================================================== */
+function renderModule(v,n,tab){
+  const m=MODS[n-1];
+  v.innerHTML=`
+  <div class="modhead">
+    <button class="btn ghost sm" onclick="go('home')">← Mapa</button>
+    <div class="big" style="background:linear-gradient(140deg,${m.color},${shade(m.color,-40)})">${m.emoji}</div>
+    <div style="flex:1;min-width:200px">
+      <div class="small" style="letter-spacing:2px">MÓDULO ${n}</div>
+      <h2 class="sec f" style="color:#fff;margin:0">${m.title}</h2>
+      <div class="small">${m.sub}</div>
+    </div>
+    <div class="ring" style="--p:${modProgress(n)}"><span>${modProgress(n)}%</span></div>
+  </div>
+  <div class="tabs">
+    <button class="tab ${tab==='learn'?'on':''}" onclick="go('module',{mod:${n},tab:'learn'})">📖 Aprende</button>
+    <button class="tab ${tab==='play'?'on':''}" onclick="go('module',{mod:${n},tab:'play'})">🎮 Juega</button>
+    <button class="tab ${tab==='mission'?'on':''}" onclick="go('module',{mod:${n},tab:'mission'})">✍️ Misión (producto)</button>
+  </div>
+  <div id="tabbody"></div>`;
+  const tb=$('#tabbody');
+  if(tab==='learn')window['learn'+n](tb);
+  else if(tab==='play')window['play'+n](tb);
+  else window['mission'+n](tb);
+}
+function acc(title,ic,color,inner,open){
+  return `<div class="acc ${open?'open':''}">
+   <button onclick="this.parentNode.classList.toggle('open');sfx.click()">
+     <span class="ic" style="background:${color}22;color:${color}">${ic}</span>
+     <span>${title}</span><span class="ar">▶</span>
+   </button>
+   <div class="in"><div class="pad">${inner}</div></div></div>`;
+}
+function tblHTML(head,rows){
+  return `<div class="scrollx"><table class="tbl"><thead><tr>${head.map(h=>'<th>'+h+'</th>').join('')}</tr></thead><tbody>${
+   rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')}</tbody></table></div>`;
+}
+
+/* ============================ MÓDULO 1 ============================ */
+function learn1(tb){
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#e8fbf6;color:#0f9c8e">Clase 1 · La interfaz es la ley física del mundo digital</span>
+    <h2 class="sec f" style="margin-top:10px">La pantalla no es un dibujo: es un edificio 🏗️</h2>
+    <p class="lead">Imagina que entras a un centro comercial. ¿Quién decidió dónde están las escaleras, las vitrinas y la salida? Un arquitecto. Con las aplicaciones pasa lo mismo: <b>alguien diseñó cada botón</b> para que hicieras algo concreto. A ese diseño se le llama <b>INTERFAZ</b>, y no es decoración: es la regla del juego.</p>
+    <div class="grid g2" style="align-items:center">
+      <div class="artframe">${ART.phoneZones}</div>
+      <div>
+        <div class="box info"><b>Las 3 zonas del edificio</b> (toca cada una):</div>
+        <div class="zones">
+          <div class="zone" style="background:#17c3b2;color:#fff" onclick="zoneInfo(this,'<b>1. ENCABEZADO</b> (arriba): hora, batería, nombre de la app, cámara y notificaciones. Es el <i>techo</i>: te dice dónde estás.')">1 · Encabezado</div>
+          <div class="zone" style="background:#ffd23f;color:#3a2c00" onclick="zoneInfo(this,'<b>2. FEED</b> (centro): el río de contenido. Es el <i>piso principal</i>: aquí pasas el 90% del tiempo y aquí vive el algoritmo.')">2 · Feed</div>
+          <div class="zone" style="background:#ff6b6b;color:#fff" onclick="zoneInfo(this,'<b>3. BARRA INFERIOR</b> (abajo): los botones para moverte (inicio, buscar, subir, bandeja, perfil). Son las <i>puertas</i>: deciden a dónde puedes ir.')">3 · Navegación</div>
+        </div>
+        <div id="zoneOut" class="box tip" style="min-height:78px">👆 Toca una zona para ver qué hace.</div>
+        <div class="box note"><b>La súper ecuación del taller:</b><br>
+        <span style="font-family:'Fredoka';font-size:19px">INTERFAZ + ALGORITMO = <span style="color:#e04f4f">TU ATENCIÓN</span></span><br>
+        <span class="small">Y la atención… es dinero. Quien controla la interfaz, controla lo que miras.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 4px">Los 3 gigantes que debes conocer</h3>
+    <p class="lead">En tu cuaderno escríbelos tal cual: son las ideas científicas del módulo, pero en idioma humano.</p>
+    <div class="grid g3">
+      <div class="box tip" style="margin:0"><b>🌊 EL FEED (el río)</b><br>Secuencia de contenido elegida para retenerte. <u>No es la realidad</u>: es un producto curado con matemáticas. El <b>scroll infinito</b> quita los puntos de parada para que nunca decidas cerrar la app. Funciona como una máquina tragamonedas: a veces ganas, a veces no, y por eso sigues jugando.</div>
+      <div class="box info" style="margin:0"><b>🪞 EL PERFIL (la vitrina)</b><br>Tu identidad pública curada. Todo lo que subes es <b>público, permanente y auditable</b> (colegios, empleadores, familias). No es tu "yo real": es tu "yo vendible" dentro de la economía de la atención.</div>
+      <div class="box warn" style="margin:0"><b>🤖 EL ALGORITMO (el robot)</b><br>Reglas matemáticas y redes neuronales que deciden <b>qué</b> se muestra, <b>a quién</b> y en qué milisegundo. Su único objetivo: retención. No tiene ética ni moral; solo optimiza clics, segundos y compartidos. En Latinoamérica puede mover la opinión pública en horas.</div>
+    </div>
+    <div class="artframe" style="margin-top:14px">${ART.algo}</div>
+  </div>
+
+  ${acc('🔤 Definiciones quirúrgicas: los 3 tipos de redes','🧬','#8b5cf6',`
+    <div class="grid g3">
+      <div class="box note" style="margin:0"><b>1. Microblogging (texto corto)</b><br>Ejemplo: X / Twitter.<br>Fomenta debate rápido, síntesis y polarización. Como caben pocos caracteres, gana el que grita más fuerte o el más sensacionalista.</div>
+      <div class="box note" style="margin:0"><b>2. Red visual (imagen / video)</b><br>Ejemplos: Instagram, TikTok.<br>Fomenta comparación social, estética, consumo pasivo de dopamina y venta de estilos de vida.</div>
+      <div class="box note" style="margin:0"><b>3. Mensajería cerrada</b><br>Ejemplos: WhatsApp, Telegram.<br>Comunicación privada y grupos. En Latinoamérica es la infraestructura crítica del comercio informal, la organización comunitaria… y de la desinformación.</div>
+    </div>
+    <p class="small" style="margin-top:10px">📌 Dato: en Latinoamérica más del <b>80%</b> de las personas entra a internet desde el celular. Por eso el diseño "móvil primero" manda.</p>`,true)}
+
+  ${acc('📊 Tabla 1 · Matriz de clasificación de plataformas','📋','#17c3b2',
+    tblHTML(['Plataforma','Formato dominante','Mecanismo principal','Naturaleza del contenido'],TABLA1)+
+    `<div class="box tip" style="margin-top:12px"><b>Para tu cuaderno:</b> cópiala con regla de 30 cm, líneas de 1 mm, tinta negra y sin tachaduras. Si te equivocas: una línea diagonal simple y sigues.</div>`)}
+
+  ${acc('🚦 Figura 1 · Zonas verdes (dopamina) y zonas rojas (fricción)','🎨','#ff6b6b',`
+    <div class="grid g2">
+      <div>
+        <div class="box tip"><b style="color:#0f9c8e">🟢 ZONA VERDE = puntos de dopamina / retención</b>
+          <ul class="tick">
+            <li><b>Feed infinito:</b> recompensa variable (nunca sabes qué viene).</li>
+            <li><b>Notificaciones con insignia roja:</b> reclamo urgente de atención.</li>
+            <li><b>Historias con anillos de colores:</b> urgencia y FOMO ("me lo voy a perder").</li>
+            <li><b>Autoplay:</b> el video siguiente empieza sin que lo pidas.</li>
+          </ul></div>
+      </div>
+      <div>
+        <div class="box warn"><b style="color:#c0392b">🔴 ZONA ROJA = puntos de fricción / decisión</b>
+          <ul class="tick">
+            <li><b>Botón "Publicar":</b> acción irreversible, sin red de seguridad.</li>
+            <li><b>Botón "Configuración":</b> control… escondido a propósito en menús profundos.</li>
+            <li><b>Etiqueta "Patrocinado":</b> ahí alguien pagó por tu atención.</li>
+            <li><b>"Eliminar cuenta":</b> el camino más difícil de encontrar de toda la app.</li>
+          </ul></div>
+      </div>
+    </div>
+    <div class="box info"><b>Código de colores para tu dibujo:</b> contornos en tinta <b>negra</b>, flechas y etiquetas de dopamina en <b>azul</b>, etiquetas de fricción en <b>rojo</b>.</div>`)}
+
+  ${acc('🧠 Axiomas de la economía de la atención (lectura obligatoria)','📜','#4cc9f0',`
+    <div class="box info"><i>"La interfaz de una red social es un mecanismo de extracción de atención. No existe el diseño neutral. Cada píxel, cada curva de un botón y cada transición de pantalla están calibrados mediante pruebas A/B masivas para minimizar la fricción cognitiva y maximizar el tiempo de permanencia."</i></div>
+    <p class="lead"><b>¿Qué es una prueba A/B?</b> La empresa muestra dos versiones del mismo botón a millones de personas y se queda con la que te hace pasar más tiempo conectado. Tú eres el experimento.</p>
+    <p class="lead"><b>¿Qué es la fricción?</b> Todo lo que te hace pensar o detenerte. Las apps la eliminan: por eso no hay botón de "¿seguro que quieres seguir viendo?".</p>`)}
+
+  ${acc('✍️ Dictado de los 40 elementos (para tu cuaderno)','📝','#ffd23f',`
+    <p class="lead">El profesor dicta 40 elementos a ritmo constante. Tú escribes: <b>elemento + plataforma + función técnica</b> (Retención, Interacción, Monetización o Navegación). Reglas: postura erguida, silencio, celular apagado en la mochila.</p>
+    ${tblHTML(['Elemento de interfaz','Plataforma','Función'],ELEMENTS.map(e=>[e.t,e.p,'<b>'+e.f+'</b>']))}
+    <div class="box note" style="margin-top:12px">Completa en tu cuaderno los 22 restantes: se te ocurrirán solo con mirar tu teléfono (carrusel, sticker de preguntas, live, marcador, reacciones, modo oscuro, "desliza para subir", sugeridos, cuenta regresiva, insignia verificada, regalos en vivo, notas de voz, estados, encuestas, recordatorios, "amigos cercanos", subtítulos automáticos, dúos, plantillas, tienda, suscripción premium, límite de uso diario).</div>`)}
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn teal" onclick="go('module',{mod:1,tab:'play'})">🎮 ¡A jugar el laberinto!</button>
+    <button class="btn" onclick="go('module',{mod:1,tab:'mission'})">✍️ Ir a la Misión</button>
+  </div>`;
+}
+function zoneInfo(el,txt){
+  $$('.zone').forEach(z=>z.classList.remove('on'));el.classList.add('on');
+  $('#zoneOut').innerHTML=txt;sfx.click();
+}
+
+/* ---------- JUEGO 1A: LABERINTO PAC-MAN ---------- */
+const MAZE=[
+"#####################",
+"#...................#",
+"#.###.###.#.###.###.#",
+"#.#...#...#...#...#.#",
+"#.#.###.###.#.###.#.#",
+"#...#.........#...#.#",
+"###.#.###.#.###.#.###",
+"#...#.#...P...#.#...#",
+"###.#.###.#.###.#.###",
+"#...#.........#...#.#",
+"#.#.###.###.#.###.#.#",
+"#.#...#...#...#...#.#",
+"#.###.###.#.###.###.#",
+"#...................#",
+"#####################"];
+const MH=15,MW=21,CELL=30;
+const ORB_CELLS=[[1,1],[1,19],[13,19],[13,1]];
+const DR=[-1,1,0,0],DC=[0,0,-1,1]; // up down left right
+const DIRNAME=['up','down','left','right'];
+
+function play1(tb){
+  tb.innerHTML=`
+  <div class="grid g2" style="align-items:start">
+    <div class="game" style="position:relative">
+      <span class="pill" style="background:rgba(255,210,63,.2);color:#ffe9a8">🕹️ Juego 1A · El Laberinto de la Atención</span>
+      <h3 class="f" style="margin-top:8px">Come SOLO la respuesta correcta</h3>
+      <p class="lead" style="color:#b9c9e8;font-size:13.6px">Guía a PIX por el laberinto con las flechas (o el teclado W-A-S-D). En las 4 esquinas hay 4 esferas con letras: son las respuestas. <b style="color:#ffd23f">Solo debes comer la correcta</b>. Si comes una equivocada, pierdes una vida. ¡Cuidado con los fantasmas del algoritmo!</p>
+      <div class="qbar" id="pq">Cargando…</div>
+      <div class="row" style="justify-content:space-between;margin-bottom:8px">
+        <div class="hearts" id="pLives">❤️❤️❤️</div>
+        <div><span class="pill" style="background:rgba(255,255,255,.12);color:#fff">Ronda <span id="pRound">1</span>/5</span>
+        <span class="pill" style="background:rgba(23,195,178,.2);color:#5ff0e0">Puntos <span id="pScore">0</span></span></div>
+      </div>
+      <div style="position:relative">
+        <canvas id="pac" width="${MW*CELL}" height="${MH*CELL}"></canvas>
+        <div id="pOverlay" class="overlay" style="display:none"></div>
+      </div>
+      <div class="legend"><span><i style="background:#ffd23f"></i>Respuestas (esquinas)</span><span><i style="background:#ffe9a8"></i>Puntos de atención</span><span><i style="background:#ff6b6b"></i>Fantasmas</span></div>
+      <div class="dpad">
+        <div></div><button data-d="0">▲</button><div></div>
+        <button data-d="2">◀</button><button id="pPause">⏸</button><button data-d="3">▶</button>
+        <div></div><button data-d="1">▼</button><div></div>
+      </div>
+    </div>
+    <div>
+      <div class="card">
+        <h3 class="f" style="margin:0 0 8px">🎯 Cómo ganar estrellas</h3>
+        <ul class="tick">
+          <li>Cada ronda acertada: <b>+40 XP</b> y sigues adelante.</li>
+          <li>Cada punto pequeño de atención que comes: <b>+2 XP</b>.</li>
+          <li>Terminar las 5 rondas con las 3 vidas: <b>⭐⭐⭐</b></li>
+          <li>Con 2 vidas: <b>⭐⭐</b> · Con 1 vida: <b>⭐</b></li>
+        </ul>
+        <div class="box warn"><b>Trampa del diseñador:</b> los fantasmas se mueven más lento que tú, pero aprenden a perseguirte. Usa los pasillos largos para esquivarlos.</div>
+        <div class="box tip"><b>Regla sagrada:</b> leer la pregunta ANTES de moverte. Comer por comer = perder. Así funciona el scroll infinito: actuar sin pensar.</div>
+      </div>
+      <div class="card" style="margin-top:16px">
+        <h3 class="f" style="margin:0 0 8px">🧩 Juego 1B · Clasificador de elementos</h3>
+        <p class="lead">Clasifica 18 piezas de interfaz: plataforma + función técnica.</p>
+        <button class="btn purple" onclick="startClassifier()">Jugar al clasificador ▶</button>
+      </div>
+    </div>
+  </div>`;
+  startPac();
+}
+
+let PAC=null;
+function startPac(){
+  const cv=$('#pac');if(!cv)return;
+  const ctx=cv.getContext('2d');
+  const rounds=shuffle(PAC_QUESTIONS).slice(0,5);
+  PAC={
+    cv,ctx,round:0,lives:3,score:0,paused:false,over:false,eaten:new Set(),
+    letters:['A','B','C','D'],order:[],orbs:{},raf:null,last:0,freeze:0,tick:0
+  };
+  const keyH=e=>{
+    const k=e.key.toLowerCase();
+    let d=null;
+    if(k==='arrowup'||k==='w')d=0;else if(k==='arrowdown'||k==='s')d=1;
+    else if(k==='arrowleft'||k==='a')d=2;else if(k==='arrowright'||k==='d')d=3;
+    else if(k===' '){PAC.paused=!PAC.paused;paintOverlayBtn();e.preventDefault();return}
+    if(d!==null){PAC.want=d;e.preventDefault()}
+  };
+  document.addEventListener('keydown',keyH);
+  $$('.dpad button[data-d]').forEach(b=>{
+    const f=e=>{e.preventDefault();PAC.want=parseInt(b.dataset.d)};
+    b.addEventListener('touchstart',f,{passive:false});b.addEventListener('mousedown',f);
+  });
+  $('#pPause').onclick=()=>{PAC.paused=!PAC.paused;paintOverlayBtn()};
+  let tS=null;
+  cv.addEventListener('touchstart',e=>{const t=e.touches[0];tS={x:t.clientX,y:t.clientY}},{passive:true});
+  cv.addEventListener('touchend',e=>{
+    if(!tS)return;const t=e.changedTouches[0];const dx=t.clientX-tS.x,dy=t.clientY-tS.y;
+    if(Math.abs(dx)<18&&Math.abs(dy)<18)return;
+    PAC.want=Math.abs(dx)>Math.abs(dy)?(dx>0?3:2):(dy>0?1:0);tS=null;
+  },{passive:true});
+  CLEANUP=()=>{document.removeEventListener('keydown',keyH);if(PAC&&PAC.raf)cancelAnimationFrame(PAC.raf);PAC=null};
+  setupRound();
+  PAC.last=performance.now();
+  loop(PAC.last);
+}
+function setupRound(){
+  const r=rounds_get(PAC.round);
+  PAC.order=shuffle([0,1,2,3]);
+  PAC.orbs={};
+  ORB_CELLS.forEach((c,i)=>{PAC.orbs[c[0]+','+c[1]]=PAC.order[i]});
+  PAC.dead={};
+  PAC.eaten=new Set();
+  PAC.pac={r:7,c:10,dir:3,want:3,prog:0,speed:135};
+  PAC.ghosts=[{r:7,c:1,dir:3,prog:0,speed:225,color:'#ff6b6b',decide:true},
+              {r:7,c:19,dir:2,prog:0,speed:240,color:'#8b5cf6',decide:true}];
+  PAC.freeze=1200;
+  $('#pq').innerHTML=`<b style="color:#ffd23f">Pregunta ${PAC.round+1}:</b> ${r.q}<br>
+   <span class="small" style="color:#9fb4d8">Esferas: <b style="color:#fff">A</b> ${esc(r.a[PAC.order[0]])} · <b style="color:#fff">B</b> ${esc(r.a[PAC.order[1]])} · <b style="color:#fff">C</b> ${esc(r.a[PAC.order[2]])} · <b style="color:#fff">D</b> ${esc(r.a[PAC.order[3]])}</span>`;
+  $('#pRound').textContent=PAC.round+1;
+  paintLives();
+}
+function rounds_get(i){return PAC._rounds[i]}
+function paintLives(){$('#pLives').textContent='❤️'.repeat(Math.max(0,PAC.lives))+'🖤'.repeat(Math.max(0,3-PAC.lives));$('#pScore').textContent=PAC.score}
+function paintOverlayBtn(){$('#pPause').textContent=PAC.paused?'▶':'⏸'}
+function wall(r,c){return r<0||c<0||r>=MH||c>=MW||MAZE[r][c]==='#'}
+function openDirs(r,c){const o=[];for(let d=0;d<4;d++){if(!wall(r+DR[d],c+DC[d]))o.push(d)}return o}
+function loop(ts){
+  if(!PAC)return;
+  const dt=Math.min(60,ts-PAC.last);PAC.last=ts;
+  if(!PAC.paused&&!PAC.over){
+    if(PAC.freeze>0)PAC.freeze-=dt;
+    else{update(dt)}
+    PAC.tick+=dt;
+  }
+  draw();
+  PAC.raf=requestAnimationFrame(loop);
+}
+function update(dt){
+  const p=PAC.pac;
+  // dirección deseada
+  if(p.want!==undefined&&p.want!==null&&!wall(p.r+DR[p.want],p.c+DC[p.want])&&p.prog<0.02)p.dir=p.want;
+  if(wall(p.r+DR[p.dir],p.c+DC[p.dir])){
+    if(p.want!==null&&!wall(p.r+DR[p.want],p.c+DC[p.want]))p.dir=p.want;
+    else{const o=openDirs(p.r,p.c);p.dir=o.length?o[0]:null}
+  }
+  if(p.dir!==null&&p.dir!==undefined){
+    p.prog+=dt/p.speed;
+    while(p.prog>=1){p.prog-=1;p.r+=DR[p.dir];p.c+=DC[p.dir];arrivePac();
+      if(wall(p.r+DR[p.dir],p.c+DC[p.dir])){break}}
+  } else p.prog=0;
+  // fantasmas
+  PAC.ghosts.forEach(g=>{
+    if(g.decide){
+      const o=openDirs(g.r,g.c).filter(d=>d!==(g.dir^1)||o_single(g));
+      const opts=openDirs(g.r,g.c);
+      let cand=opts.filter(d=>!(d===(g.dir^1)));
+      if(!cand.length)cand=opts;
+      if(Math.random()<0.62){
+        cand.sort((a,b)=>{
+          const da=Math.abs(g.r+DR[a]-PAC.pac.r)+Math.abs(g.c+DC[a]-PAC.pac.c);
+          const db=Math.abs(g.r+DR[b]-PAC.pac.r)+Math.abs(g.c+DC[b]-PAC.pac.c);
+          return da-db});
+        g.dir=cand[0];
+      } else g.dir=cand[Math.floor(Math.random()*cand.length)];
+      g.decide=false;
+    }
+    g.prog+=dt/g.speed;
+    if(g.prog>=1){g.prog-=1;g.r+=DR[g.dir];g.c+=DC[g.dir];g.decide=true;
+      if(wall(g.r+DR[g.dir],g.c+DC[g.dir])){const o=openDirs(g.r,g.c);g.dir=o[0];g.decide=true}}
+  });
+  // colisión
+  const pp=posOf(PAC.pac);
+  PAC.ghosts.forEach(g=>{const gp=posOf(g);
+    if(Math.hypot(pp.x-gp.x,pp.y-gp.y)<CELL*0.62)hitGhost()});
+}
+function o_single(g){return openDirs(g.r,g.c).length===1}
+function posOf(e){
+  const d=(e.dir===null||e.dir===undefined)?0:e.dir;
+  return {x:(e.c+DC[d]*(e.prog||0))*CELL+CELL/2,y:(e.r+DR[d]*(e.prog||0))*CELL+CELL/2};
+}
+function arrivePac(){
+  const p=PAC.pac,key=p.r+','+p.c;
+  if(MAZE[p.r][p.c]==='.'&&!PAC.eaten.has(key)){PAC.eaten.add(key);PAC.score+=2;sfx.chomp();$('#pScore').textContent=PAC.score}
+  if(PAC.orbs[key]!==undefined&&!PAC.dead[key]){
+    const r=rounds_get(PAC.round);
+    if(PAC.orbs[key]===r.ok){winRound()}
+    else{
+      PAC.dead[key]=true;PAC.lives--;paintLives();sfx.bad();
+      const box=PAC.cv.parentNode;box.classList.add('shake');setTimeout(()=>box.classList.remove('shake'),420);
+      feedback(false,r,`Esa era: "${esc(r.a[PAC.orbs[key]])}"`);
+      if(PAC.lives<=0)loseGame(r);
+      else{PAC.pac={r:7,c:10,dir:3,want:3,prog:0,speed:135};
+        PAC.ghosts[0]={r:7,c:1,dir:3,prog:0,speed:225,color:'#ff6b6b',decide:true};
+        PAC.ghosts[1]={r:7,c:19,dir:2,prog:0,speed:240,color:'#8b5cf6',decide:true};
+        PAC.freeze=1400}
+    }
+  }
+}
+function feedback(ok,r,extra){
+  const o=$('#pOverlay');o.style.display='grid';
+  o.innerHTML=`<div class="oc pop">
+    <div style="font-size:52px">${ok?'🎉':'💥'}</div>
+    <h3 class="f" style="color:${ok?'#3ddc84':'#ff6b6b'};margin:6px 0">${ok?'¡Correcto!':'¡Ups! Esa no era'}</h3>
+    <p style="color:#dbe6fb;font-size:14px;line-height:1.55;margin:0 0 6px">${extra||''}</p>
+    <div class="box ${ok?'tip':'warn'}" style="text-align:left;font-size:13.5px;color:#22304d"><b>PIX te explica:</b> ${r.why}</div>
+    ${ok?'<button class="btn teal" onclick="nextRound()">Siguiente ronda ▶</button>':''}
+  </div>`;
+  PAC.over=true;
+}
+function winRound(){
+  sfx.win();PAC.score+=40;$('#pScore').textContent=PAC.score;
+  feedback(true,rounds_get(PAC.round),'Comiste la esfera correcta. +40 XP');
+}
+function nextRound(){
+  PAC.over=false;$('#pOverlay').style.display='none';
+  PAC.round++;
+  if(PAC.round>=5){finishPac();return}
+  setupRound();PAC.freeze=900;
+}
+function loseGame(r){
+  PAC.over=true;sfx.bad();
+  const o=$('#pOverlay');o.style.display='grid';
+  o.innerHTML=`<div class="oc pop"><div style="font-size:52px">👻</div>
+   <h3 class="f" style="color:#ff6b6b">¡Te atrapó el algoritmo!</h3>
+   <p style="color:#dbe6fb;font-size:14px">Perdiste tus 3 vidas. Tranquilo/a: en el mundo digital siempre puedes reiniciar (cosa que en la vida real no pasa con lo que publicas 😉).</p>
+   <button class="btn coral" onclick="retryPac()">Reintentar ronda</button></div>`;
+}
+function retryPac(){PAC.over=false;PAC.lives=3;$('#pOverlay').style.display='none';setupRound()}
+function finishPac(){
+  const st=PAC.lives>=3?3:(PAC.lives===2?2:1);
+  const sc=PAC.score;
+  PAC.over=true;sfx.win();
+  const o=$('#pOverlay');o.style.display='grid';
+  o.innerHTML=`<div class="oc pop"><div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+   <h3 class="f" style="color:#ffd23f">¡Laberinto superado!</h3>
+   <p style="color:#dbe6fb;font-size:14px">Puntaje: <b>${sc}</b> puntos · Vidas restantes: ${PAC.lives}</p>
+   <button class="btn teal" onclick="closePacWin()">Continuar ▶</button></div>`;
+  markDone('m1a',st,80,'Laberinto completado');
+}
+function closePacWin(){$('#pOverlay').style.display='none';
+  modal(`<div style="text-align:center">${ART.medal}
+   <h3 class="f">¡Insignia desbloqueada!</h3>
+   <p class="lead">"Lector/a de interfaces": ya sabes que cada botón tiene una intención.</p>
+   <button class="btn teal" onclick="closeModal()">¡Genial!</button></div>`)}
+
+function draw(){
+  const {ctx}=PAC;const W=MW*CELL,H=MH*CELL;
+  ctx.clearRect(0,0,W,H);
+  ctx.fillStyle='#060b1c';ctx.fillRect(0,0,W,H);
+  // muros
+  for(let r=0;r<MH;r++)for(let c=0;c<MW;c++){
+    if(MAZE[r][c]==='#'){
+      ctx.fillStyle='#16305e';
+      ctx.beginPath();ctx.roundRect(c*CELL+2,r*CELL+2,CELL-4,CELL-4,7);ctx.fill();
+      ctx.strokeStyle='#2f6fd0';ctx.lineWidth=1.6;ctx.stroke();
+    }
+  }
+  // puntos
+  for(let r=0;r<MH;r++)for(let c=0;c<MW;c++){
+    if(MAZE[r][c]==='.'&&!PAC.eaten.has(r+','+c)){
+      ctx.fillStyle='#ffe9a8';ctx.beginPath();ctx.arc(c*CELL+CELL/2,r*CELL+CELL/2,3.1,0,7);ctx.fill();
+    }
+  }
+  // esferas de respuesta
+  const pulse=1+Math.sin(PAC.tick/220)*0.12;
+  ORB_CELLS.forEach((cell,i)=>{
+    const key=cell[0]+','+cell[1];
+    const idx=PAC.orbs[key];
+    const x=cell[1]*CELL+CELL/2,y=cell[0]*CELL+CELL/2;
+    if(PAC.dead[key]){
+      ctx.fillStyle='#4a2030';ctx.beginPath();ctx.arc(x,y,11,0,7);ctx.fill();
+      ctx.strokeStyle='#ff6b6b';ctx.lineWidth=3;
+      ctx.beginPath();ctx.moveTo(x-6,y-6);ctx.lineTo(x+6,y+6);ctx.moveTo(x+6,y-6);ctx.lineTo(x-6,y+6);ctx.stroke();
+      return;
+    }
+    const cols=['#ffd23f','#4cc9f0','#3ddc84','#ff9f1c'];
+    ctx.save();ctx.shadowColor=cols[idx];ctx.shadowBlur=16;
+    ctx.fillStyle=cols[idx];ctx.beginPath();ctx.arc(x,y,12*pulse,0,7);ctx.fill();ctx.restore();
+    ctx.fillStyle='#12203a';ctx.font='bold 14px Fredoka, sans-serif';ctx.textAlign='center';ctx.textBaseline='middle';
+    ctx.fillText(PAC.letters[idx],x,y+1);
+  });
+  // fantasmas
+  PAC.ghosts.forEach(g=>{
+    const p=posOf(g);
+    ctx.save();ctx.translate(p.x,p.y);
+    ctx.fillStyle=g.color;
+    ctx.beginPath();ctx.arc(0,-3,11,Math.PI,0);ctx.lineTo(11,9);
+    for(let i=0;i<4;i++){ctx.lineTo(11-i*5.5-2.75,5);ctx.lineTo(11-(i+1)*5.5,9)}
+    ctx.closePath();ctx.fill();
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.arc(-4,-5,3.6,0,7);ctx.arc(4,-5,3.6,0,7);ctx.fill();
+    ctx.fillStyle='#12203a';
+    const dx=DC[g.dir||0]*1.6,dy=DR[g.dir||0]*1.6;
+    ctx.beginPath();ctx.arc(-4+dx,-5+dy,1.9,0,7);ctx.arc(4+dx,-5+dy,1.9,0,7);ctx.fill();
+    ctx.restore();
+  });
+  // pacman
+  const p=posOf(PAC.pac);const d=PAC.pac.dir||0;
+  const ang=[-Math.PI/2,Math.PI/2,Math.PI,0][d];
+  const mouth=0.28+Math.abs(Math.sin(PAC.tick/90))*0.28;
+  ctx.save();ctx.translate(p.x,p.y);ctx.rotate(ang);
+  ctx.shadowColor='#ffd23f';ctx.shadowBlur=14;
+  ctx.fillStyle='#ffd23f';ctx.beginPath();ctx.arc(0,0,12,mouth*Math.PI,2*Math.PI-mouth*Math.PI);ctx.lineTo(0,0);ctx.closePath();ctx.fill();
+  ctx.shadowBlur=0;ctx.fillStyle='#12203a';ctx.beginPath();ctx.arc(3,-6,1.8,0,7);ctx.fill();
+  ctx.restore();
+  if(PAC.freeze>0&&!PAC.over){
+    ctx.fillStyle='rgba(6,11,28,.55)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#fff';ctx.font='bold 22px Fredoka, sans-serif';ctx.textAlign='center';
+    ctx.fillText('¡Prepárate! '+Math.ceil(PAC.freeze/1000),W/2,H/2);
+  }
+  if(PAC.paused&&!PAC.over){
+    ctx.fillStyle='rgba(6,11,28,.7)';ctx.fillRect(0,0,W,H);
+    ctx.fillStyle='#ffd23f';ctx.font='bold 26px Fredoka, sans-serif';ctx.textAlign='center';
+    ctx.fillText('⏸ PAUSA',W/2,H/2);
+  }
+}
+function markDone(key,stars,xp,msg){
+  const prev=S.done[key]||0;
+  if(stars>prev){S.done[key]=stars}
+  save();paintTop();addXP(xp,msg||'');
+}
+
+/* ---------- JUEGO 1B: CLASIFICADOR ---------- */
+function startClassifier(){
+  const items=shuffle(ELEMENTS).slice(0,12);
+  let i=0,ok=0,streak=0;
+  const wrap=document.createElement('div');
+  wrap.className='game';
+  wrap.innerHTML=`<span class="pill" style="background:rgba(139,92,246,.22);color:#d9c9ff">🧩 Juego 1B</span>
+    <h3 class="f" style="margin-top:8px">Clasificador de elementos de interfaz</h3>
+    <div class="pbar"><i id="clBar"></i></div>
+    <div id="clBody"></div>`;
+  const tb=$('#tabbody');tb.innerHTML='';tb.appendChild(wrap);
+  tb.insertAdjacentHTML('beforeend',`<div class="row" style="justify-content:center;margin-top:14px"><button class="btn ghost" onclick="go('module',{mod:1,tab:'play'})">← Volver a los juegos</button></div>`);
+  function render(){
+    if(i>=items.length){
+      const st=ok>=11?3:ok>=8?2:1;
+      $('#clBody').innerHTML=`<div style="text-align:center;padding:20px">
+        <div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+        <h3 class="f" style="color:#fff">Clasificaste ${ok} de ${items.length}</h3>
+        <p class="lead" style="color:#b9c9e8">Así piensa un analista de interfaces: elemento → plataforma → función.</p>
+        <button class="btn teal" onclick="startClassifier()">Jugar otra vez 🔁</button></div>`;
+      markDone('m1b',st,ok*12,'Clasificador completado');sfx.win();return;
+    }
+    const it=items[i];
+    $('#clBar').style.width=(i/items.length*100)+'%';
+    $('#clBody').innerHTML=`
+      <div class="qbar"><span class="small" style="color:#9fb4d8">Elemento ${i+1}/${items.length} · Racha ${streak} 🔥</span>
+      <div style="font-size:18px;font-weight:900;color:#fff;margin-top:4px">${it.t}</div></div>
+      <div class="box info" style="color:#22304d"><b>Paso 1:</b> ¿A qué plataforma pertenece principalmente?</div>
+      <div id="clP">${shuffle(it.po).map(o=>`<button class="opt" data-o="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+      <div id="clF"></div>`;
+    $$('#clP .opt').forEach(b=>b.onclick=()=>{
+      if(b.dataset.o===it.p){
+        b.classList.add('ok');sfx.ok();
+        $$('#clP .opt').forEach(x=>x.classList.add('dis'));
+        $('#clF').innerHTML=`<div class="box info" style="color:#22304d"><b>Paso 2:</b> ¿Cuál es su función técnica?</div>
+          ${shuffle(['Retención','Interacción','Monetización','Navegación']).map(o=>`<button class="opt" data-f="${o}">${o}</button>`).join('')}`;
+        $$('#clF .opt').forEach(b2=>b2.onclick=()=>{
+          if(b2.dataset.f===it.f){
+            b2.classList.add('ok');sfx.ok();ok++;streak++;i++;
+            setTimeout(render,650);
+          }else{b2.classList.add('no');sfx.bad();streak=0;
+            b2.insertAdjacentHTML('afterend',`<div class="box warn" style="color:#7a2020">Piénsalo otra vez: ¿esto te hace quedar más tiempo (retención), te hace actuar (interacción), hace ganar dinero a la app (monetización) o te mueve por el mapa (navegación)?</div>`);
+            b2.classList.add('dis');b2.onclick=null}
+        });
+      }else{b.classList.add('no');sfx.bad();streak=0;setTimeout(()=>b.classList.remove('no'),600)}
+    });
+  }
+  render();
+}
+
+/* ---------- MISIÓN 1 ---------- */
+const PLAT_LIST=['WhatsApp','TikTok','Instagram','LinkedIn','X (Twitter)','Telegram','Facebook','YouTube'];
+function mission1(tb){
+  const st=S.m1;
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#fff1f1;color:#c0392b">Producto 1 · Se entrega a mano en papel milimetrado</span>
+    <h2 class="sec f" style="margin-top:10px">Matriz de Disección Arquitectónica 🔬</h2>
+    <p class="lead">Vas a analizar <b>3 redes sociales</b> y a diseccionar su arquitectura con rigor de ingeniería. Esta herramienta te ayuda a <b>pensar y ordenar</b> tu informe; después lo copias a mano con regla y escuadra.</p>
+    <div class="box warn"><b>Prohibiciones absolutas:</b> nada de corrector líquido, nada de borrones. ¿Error? Línea diagonal simple y continúas. Cada línea principal es definitiva.</div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 10px">Paso 1 · Elige tus 3 plataformas</h3>
+    <div class="row" id="m1Plats">${PLAT_LIST.map(p=>`<button class="btn sm ${st.plats.includes(p)?'teal':'ghost'}" data-p="${p}" style="${st.plats.includes(p)?'':'background:#eef3ff;color:#12203a'}">${p}</button>`).join('')}</div>
+    <p class="small" id="m1Count">Seleccionadas: ${st.plats.length}/3</p>
+  </div>
+
+  <div id="m1Blocks"></div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Paso 4 · Demostración lógica (exactamente 100 palabras)</h3>
+    <p class="lead">Explica cómo la interfaz <b>obliga</b> al usuario a comportarse de cierta manera. Ni 99, ni 101: <b>100 palabras exactas</b>. Sí, cuenta la disciplina. 😉</p>
+    <textarea id="m1Text" rows="7" placeholder="Ejemplo de tono: La ausencia de un botón de editar tras la publicación obliga a la precisión extrema…">${esc(st.text||'')}</textarea>
+    <div class="row" style="justify-content:space-between;margin-top:8px">
+      <span class="count" id="m1WC">0 / 100 palabras</span>
+      <span class="small">Consejo: escribe 110 y luego recorta 10.</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 10px">Paso 5 · Checklist de integridad del informe</h3>
+    <div id="m1Checks"></div>
+  </div>
+
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn teal" onclick="finishMission1()">✅ Marcar misión como terminada</button>
+    <button class="btn" onclick="printMission1()">🖨️ Imprimir mi borrador</button>
+  </div>`;
+  const CHECKS1=['Encabezado institucional: nombre, fecha, asignatura, docente y título centrado y subrayado',
+   'Tres bloques rectangulares (uno por red) dibujados con regla de 30 cm y escuadra',
+   'Interfaz dibujada con proporción 19.5:9 usando la cuadrícula milimetrada como guía',
+   '5 flechas por bloque: Feed, Perfil, Navegación, Interacción, Notificaciones',
+   'Tabla de doble entrada: formato dominante, mecanismo de interacción y monetización',
+   'Tinta negra en contornos · azul en puntos de dopamina · roja en puntos de fricción',
+   'Párrafo de exactamente 100 palabras en cada bloque',
+   'Firma de integridad + huella dactilar al pie de la última página'];
+  renderChecks('m1Checks',CHECKS1,S.m1,'checks');
+  $$('#m1Plats button').forEach(b=>b.onclick=()=>{
+    const p=b.dataset.p;const a=S.m1.plats;const k=a.indexOf(p);
+    if(k>=0)a.splice(k,1);else{if(a.length>=3){toast('Solo puedes elegir 3 🙌');return}a.push(p)}
+    save();mission1(tb);sfx.click();
+  });
+  const ta=$('#m1Text');
+  ta.oninput=()=>{S.m1.text=ta.value;save();countWords(ta.value,'m1WC',100)};
+  countWords(ta.value,'m1WC',100);
+  renderBlocks();
+}
+function renderBlocks(){
+  const cont=$('#m1Blocks');if(!cont)return;
+  const els=['Feed','Perfil','Navegación','Interacción','Notificaciones'];
+  const fmt=['Texto corto / hilos','Imagen / video corto','Video vertical corto','Mensajería cerrada','Texto profesional'];
+  const mec=['Retweet / cita / respuesta','Like / comentario / compartir','Reproducción / duetos / tendencias','Reenviar / responder / reacciones','Recomendar / conectar / comentar'];
+  const mon=['Publicidad en el feed','Comercio visual + anuncios','Regalos en vivo + publicidad','Suscripciones premium','Publicidad segmentada B2B'];
+  cont.innerHTML=S.m1.plats.map((p,idx)=>{
+    const d=S.m1.elems[p]||{};const t=S.m1.tbl[p]||{};
+    return `<div class="card" style="margin-top:16px">
+      <h3 class="f" style="margin:0 0 4px">Bloque ${idx+1} · ${esc(p)}</h3>
+      <p class="small">Marca los 5 elementos clave que señalarás con flechas en tu dibujo y completa la tabla de doble entrada.</p>
+      <div class="row">${els.map(e=>`<button class="btn sm ${d[e]?'teal':''}" style="${d[e]?'':'background:#eef3ff;color:#12203a'}" onclick="toggleEl('${esc(p)}','${e}')">${d[e]?'✔ ':''}${e}</button>`).join('')}</div>
+      <hr class="sep">
+      <div class="grid g3">
+        <div><label class="small"><b>Formato dominante</b></label>
+          <select onchange="setTbl('${esc(p)}','f',this.value)">${fmt.map(o=>`<option ${t.f===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div><label class="small"><b>Mecanismo principal</b></label>
+          <select onchange="setTbl('${esc(p)}','m',this.value)">${mec.map(o=>`<option ${t.m===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div><label class="small"><b>Modelo de monetización</b></label>
+          <select onchange="setTbl('${esc(p)}','mon',this.value)">${mon.map(o=>`<option ${t.mon===o?'selected':''}>${o}</option>`).join('')}</select></div>
+      </div>
+      <div class="box tip" style="margin-bottom:0"><b>Zonas a marcar en tu dibujo:</b> 🟢 dopamina (tinta azul) → feed infinito, insignias rojas, anillos de historias. 🔴 fricción (tinta roja) → botón publicar, configuración, eliminar cuenta.</div>
+    </div>`}).join('');
+}
+function toggleEl(p,e){S.m1.elems[p]=S.m1.elems[p]||{};S.m1.elems[p][e]=!S.m1.elems[p][e];save();sfx.click();renderBlocks()}
+function setTbl(p,k,val){S.m1.tbl[p]=S.m1.tbl[p]||{};S.m1.tbl[p][k]=val;save()}
+function countWords(txt,id,target){
+  const w=txt.trim()?txt.trim().split(/\s+/).length:0;
+  const el=document.getElementById(id);if(!el)return;
+  el.textContent=w+' / '+target+' palabras';
+  el.className='count '+(w===target?'good':(w>target?'bad':''));
+  return w;
+}
+function renderChecks(id,list,store,key){
+  const c=document.getElementById(id);if(!c)return;
+  const arr=store[key]||[];
+  c.innerHTML=list.map((t,i)=>`<div class="chk ${arr.includes(i)?'on':''}" onclick="toggleCheck('${id}',${i})">
+    <div class="bx">✔</div><div>${t}</div></div>`).join('');
+  c._store=store;c._key=key;
+}
+function toggleCheck(id,i){
+  const c=document.getElementById(id);const st=c._store,key=c._key;
+  st[key]=st[key]||[];const k=st[key].indexOf(i);
+  if(k>=0)st[key].splice(k,1);else{st[key].push(i);sfx.ok()}
+  save();c.children[i].classList.toggle('on');
+}
+function finishMission1(){
+  if(S.m1.plats.length!==3){toast('Elige exactamente 3 plataformas 🙌');return}
+  const w=(S.m1.text||'').trim().split(/\s+/).filter(Boolean).length;
+  if(w!==100){toast('Tu párrafo tiene '+w+' palabras. ¡Necesitas exactamente 100! ✍️');return}
+  const ch=(S.m1.checks||[]).length;
+  if(ch<6){toast('Marca al menos 6 puntos del checklist ('+ch+'/8)');return}
+  completeMission('m1','¡Matriz de Disección terminada!');
+}
+function printMission1(){
+  const st=S.m1;
+  let h=`<h1 style="text-align:center;text-decoration:underline">Matriz de Disección Arquitectónica de Plataformas Digitales</h1>
+  <p>Estudiante: ${esc(S.name||'__________')} · Fecha: ${new Date().toLocaleDateString('es')} · Asignatura: Ciudadanía Digital · Docente: ______________</p>`;
+  (st.plats.length?st.plats:['(elige 3 plataformas)']).forEach((p,i)=>{
+    const d=st.elems[p]||{},t=st.tbl[p]||{};
+    h+=`<h2>Bloque ${i+1}: ${esc(p)}</h2>
+    <p>Elementos clave a señalar con flechas: ${Object.keys(d).filter(k=>d[k]).join(', ')||'Feed, Perfil, Navegación, Interacción, Notificaciones'}</p>
+    <table><tr><th>Formato dominante</th><th>Mecanismo de interacción</th><th>Modelo de monetización</th></tr>
+    <tr><td>${esc(t.f||'')}</td><td>${esc(t.m||'')}</td><td>${esc(t.mon||'')}</td></tr></table>
+    <p>[ Dibujo de la interfaz a mano — proporción 19.5:9 — tinta negra / azul / roja ]</p>`;
+  });
+  h+=`<h2>Demostración lógica (100 palabras exactas)</h2><p>${esc(st.text||'')}</p>
+  <h2>Checklist de integridad</h2><ul>${(st.checks||[]).map(i=>'<li>✔ Ítem '+i+'</li>').join('')}</ul>
+  <p style="margin-top:24px"><i>"Declaro que este análisis fue diseccionado y manufacturado de mi puño y letra, sin asistencia de herramientas de diseño digital, demostrando mi dominio físico y conceptual de la arquitectura de plataformas."</i></p>
+  <p style="margin-top:40px">Firma: ______________________ · Huella dactilar: [ ]</p>`;
+  doPrint(h);
+}
+function completeMission(key,msg){
+  S.missions[key]=true;save();paintTop();sfx.star();
+  modal(`<div style="text-align:center">${ART.medal}<h3 class="f">${msg}</h3>
+   <p class="lead">+2 ⭐ y +150 XP. Recuerda pasarlo a mano en papel milimetrado: esa es la entrega real.</p>
+   <button class="btn teal" onclick="closeModal()">¡Listo!</button></div>`);
+  addXP(150,'Misión completada');
+}
+function doPrint(html){$('#print-area').innerHTML=html;setTimeout(()=>window.print(),120)}
+
+/* ============================ MÓDULO 2 ============================ */
+function learn2(tb){
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#f1eaff;color:#6b3fd1">Clase 2 · La netiqueta es el código penal de la convivencia digital</span>
+    <h2 class="sec f" style="margin-top:10px">Internet es una plaza gigante (y todos escuchan) 📣</h2>
+    <p class="lead">Escribir en una red no es una charla de pasillo: es una <b>transmisión de radio con audiencia global</b>. Y la privacidad no es un interruptor de encendido/apagado: es un <b>sistema de esclusas</b>, como las de un canal por donde pasan los barcos.</p>
+    <div class="grid g2" style="align-items:center">
+      <div class="artframe">${ART.funnel}</div>
+      <div>
+        <div class="box tip"><b>🤝 Netiqueta.</b> Normas de comportamiento en internet basadas en la empatía, el respeto a la propiedad intelectual y la contención emocional.<br><b>Regla de oro:</b> no escribas en la red lo que no dirías en persona, frente a esa audiencia.</div>
+        <div class="box info"><b>👣 Huella digital.</b> El rastro que deja cada clic, publicación, comentario y "me gusta". Es <b>permanente</b>, <b>indexable</b> (los buscadores lo guardan) y puede usarse en tu contra en auditorías laborales o procesos legales. No existe el borrado real.</div>
+        <div class="box note"><b>🔐 Configuración de privacidad.</b> Las herramientas para decidir quién entra. Ojo: la configuración <b>por defecto siempre es la más abierta</b> (para recolectar más datos). Tú debes forzar el cierre.</div>
+        <div class="box tip"><b>📎 Atribución de fuentes.</b> Citar al autor original de una idea, imagen, video o texto. Compartir sin atribuir = <b>plagio</b>. Atribuir = <b>ciudadanía</b>.</div>
+        <div class="box warn"><b>🚨 Ciberacoso.</b> Usar medios digitales para hostigar, intimidar o humillar. NO es libertad de expresión: es un <b>delito</b> tipificado en los códigos penales de Latinoamérica.</div>
+      </div>
+    </div>
+  </div>
+
+  ${acc('🪜 Tabla 2 · La jerarquía de la privacidad','🔒','#8b5cf6',
+    tblHTML(['Nivel','Audiencia permitida','Riesgo','Acción requerida'],TABLA2)+
+    `<div class="box info" style="margin-top:12px"><b>Lectura rápida:</b> mientras más abajo en el embudo, menos gente te ve y más seguro estás. La pregunta clave siempre es: <i>¿quién puede ver esto y qué haría con ello?</i></div>`,true)}
+
+  ${acc('🖼️ Si te pasa esto: protocolo anti-ciberacoso','🛡️','#ff6b6b',`
+    <div class="artframe">${ART.bully}</div>
+    <div class="grid g2" style="margin-top:12px">
+      <div class="box warn" style="margin:0"><b>Lo que NO debes hacer</b><br>· Responder con más insultos (escala y ensucia tu huella).<br>· Borrar las pruebas.<br>· Guardártelo por vergüenza.<br>· Crear otra cuenta para "devolver el golpe".</div>
+      <div class="box tip" style="margin:0"><b>Lo que SÍ debes hacer</b><br>· <b>Guardar evidencia:</b> capturas con fecha, hora y nombre de usuario.<br>· <b>Bloquear</b> al agresor.<br>· <b>Reportar</b> dentro de la plataforma (usa sus normas de comunidad).<br>· <b>Contar a un adulto de confianza</b> y a la escuela.<br>· Si es grave: denuncia formal (el ciberacoso es delito).</div>
+    </div>`,true)}
+
+  ${acc('🔄 Figura 2 · El ciclo de la interacción ética (5 pasos)','♻️','#17c3b2',`
+    <div class="flow">
+      ${[['1','Recibir el contenido','Te llega un post, un comentario o un mensaje.','#4cc9f0'],
+         ['2','Pausa de 5 segundos','El filtro emocional. Respira antes de teclear.','#17c3b2'],
+         ['3','¿Aporta valor o es agresión?','Si es agresión → REPORTAR y BLOQUEAR. No alimentes.','#ffd23f'],
+         ['4','Responder con empatía y datos','Escribe como hablarías en persona.','#8b5cf6'],
+         ['5','Verificar atribución de fuentes','¿De quién es esto? ¿Doy crédito?',' #ff6b6b']]
+        .map((s,i,a)=>`<div class="fstep"><div class="dot" style="background:${s[3]}">${s[0]}</div>
+          <div><b class="f">${s[1]}</b><div class="small" style="color:#5d6e8a">${s[2]}</div></div></div>
+          ${i<a.length-1?'<div class="ln"></div>':''}`).join('')}
+    </div>
+    <div class="box note"><b>Atajo mental:</b> PAUSA → PREGUNTA → PUBLICA.</div>`,true)}
+
+  ${acc('🧑‍⚖️ Los 40 escenarios del dictado (banco de práctica)','📝','#ffd23f',
+    `<p class="lead">En clase el profesor dicta 40 escenarios a velocidad constante. Tú los divides en dos columnas: <b>Veredicto ético</b> (Ético / No ético / Delito) y <b>Acción técnica correcta</b>. Aquí tienes 12 para entrenar; inventa los otros 28 observando tu propio uso de redes durante una semana.</p>
+    ${tblHTML(['Escenario','Veredicto','Acción técnica correcta'],CASES.map(c=>[c.s,
+      `<span class="pill" style="background:${c.v==='Ético'?'#dcffe9':c.v==='Delito'?'#ffe0e0':'#fff3d6'};color:${c.v==='Ético'?'#166b3a':c.v==='Delito'?'#a02c2c':'#8a6100'}">${c.v}</span>`,c.act]))}`)}
+
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn purple" onclick="go('module',{mod:2,tab:'play'})">🎮 Ir a los juegos</button>
+    <button class="btn" onclick="go('module',{mod:2,tab:'mission'})">✍️ Ir a la Misión</button>
+  </div>`;
+}
+function play2(tb){
+  tb.innerHTML=`
+  <div class="grid g2" style="align-items:start">
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🧑‍⚖️ Juego 2A · El Tribunal de la Red</h3>
+      <p class="lead">12 escenarios reales. Decide el veredicto y luego la acción técnica correcta.</p>
+      <button class="btn purple" onclick="startTribunal()">Entrar al tribunal ▶</button></div>
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🪜 Juego 2B · El embudo de la privacidad</h3>
+      <p class="lead">8 datos personales. Coloca cada uno en el nivel correcto del embudo.</p>
+      <button class="btn teal" onclick="startFunnel()">Jugar ▶</button></div>
+  </div>
+  <div id="g2area" style="margin-top:16px"></div>`;
+}
+function startTribunal(){
+  const items=shuffle(CASES).slice(0,10);let i=0,ok=0;
+  const area=$('#g2area');
+  area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(139,92,246,.22);color:#d9c9ff">🧑‍⚖️ Tribunal de la Red</span>
+   <div class="pbar"><i id="trBar"></i></div><div id="trBody"></div></div>`;
+  function render(){
+    if(i>=items.length){
+      const st=ok>=9?3:ok>=7?2:1;
+      $('#trBody').innerHTML=`<div style="text-align:center;padding:18px"><div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+       <h3 class="f" style="color:#fff">Veredictos correctos: ${ok}/${items.length}</h3>
+       <p class="lead" style="color:#b9c9e8">Ya sabes distinguir un descuido ético de un delito real.</p>
+       <button class="btn purple" onclick="startTribunal()">Otra vez 🔁</button></div>`;
+      markDone('m2a',st,ok*14,'Tribunal completado');sfx.win();return;
+    }
+    const c=items[i];
+    $('#trBar').style.width=(i/items.length*100)+'%';
+    $('#trBody').innerHTML=`<div class="qbar"><span class="small" style="color:#9fb4d8">Caso ${i+1} de ${items.length}</span>
+      <div style="font-size:17px;font-weight:900;color:#fff;margin-top:6px">“${c.s}”</div></div>
+      <div class="box info" style="color:#22304d"><b>Paso 1 · Veredicto ético</b></div>
+      <div id="trV">${['Ético','No ético','Delito'].map(v=>`<button class="opt" data-v="${v}">${v==='Ético'?'✅ Ético':v==='No ético'?'⚠️ No ético':'🚨 Delito'}</button>`).join('')}</div>
+      <div id="trA"></div>`;
+    $$('#trV .opt').forEach(b=>b.onclick=()=>{
+      if(b.dataset.v===c.v){
+        b.classList.add('ok');sfx.ok();$$('#trV .opt').forEach(x=>x.classList.add('dis'));
+        $('#trA').innerHTML=`<div class="box info" style="color:#22304d"><b>Paso 2 · Acción técnica correcta</b></div>
+          ${shuffle(c.ao).map(o=>`<button class="opt" data-a="${esc(o)}">${esc(o)}</button>`).join('')}`;
+        $$('#trA .opt').forEach(b2=>b2.onclick=()=>{
+          if(b2.dataset.a===c.act){b2.classList.add('ok');ok++;i++;
+            b2.insertAdjacentHTML('afterend',`<div class="box tip" style="color:#0b5d50"><b>PIX:</b> ${c.why}</div>`);
+            sfx.ok();setTimeout(render,1500)}
+          else{b2.classList.add('no');sfx.bad();setTimeout(()=>{b2.classList.remove('no')},500)}
+        });
+      }else{b.classList.add('no');sfx.bad();setTimeout(()=>b.classList.remove('no'),550)}
+    });
+  }
+  render();
+}
+function startFunnel(){
+  const items=shuffle(PRIV_ITEMS);let sel=null,ok=0,done={};
+  const area=$('#g2area');
+  area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(23,195,178,.22);color:#5ff0e0">🪜 El embudo de la privacidad</span>
+   <h3 class="f" style="margin-top:8px">¿Quién debería poder ver esto?</h3>
+   <p class="lead" style="color:#b9c9e8;font-size:13.6px">Toca un dato y después toca el nivel del embudo donde lo guardarías.</p>
+   <div class="grid g2" style="align-items:start">
+     <div id="fnItems"></div><div id="fnZones"></div>
+   </div><div id="fnOut"></div></div>`;
+  function paint(){
+    $('#fnItems').innerHTML=items.map((it,i)=>`<div class="drag ${done[i]?'done':''} ${sel===i?'sel':''}" data-i="${i}">${it.t}</div>`).join('');
+    $$('#fnItems .drag').forEach(d=>d.onclick=()=>{if(done[d.dataset.i])return;sel=+d.dataset.i;sfx.click();paint()});
+    $('#fnZones').innerHTML=PRIV_LEVELS.map((lv,i)=>`<div class="dropz" data-lv="${lv}">
+      <div style="font-family:'Fredoka';font-weight:700;color:${['#ff6b6b','#ffd23f','#4cc9f0','#17c3b2'][i]}">${['🌍','👥','🤝','🔒'][i]} ${lv}</div>
+      <div class="small" style="color:#9fb4d8">${['Cualquiera y los buscadores','Solo quien tú aceptaste','Tus contactos verificados','Nadie más que tú'][i]}</div></div>`).join('');
+    $$('#fnZones .dropz').forEach(z=>z.onclick=()=>{
+      if(sel===null){toast('Primero toca un dato 👆');return}
+      const it=items[sel];
+      if(z.dataset.lv===it.lv){done[sel]=true;ok++;z.classList.add('hit');sfx.ok();
+        $('#fnOut').innerHTML=`<div class="box tip" style="color:#0b5d50"><b>¡Correcto!</b> ${it.t} → ${it.lv}</div>`;sel=null;setTimeout(paint,250)}
+      else{z.classList.add('hit');setTimeout(()=>z.classList.remove('hit'),400);sfx.bad();
+        $('#fnOut').innerHTML=`<div class="box warn" style="color:#7a2020">Piensa: ¿qué pasaría si un desconocido viera esto? Intenta otro nivel.</div>`}
+      if(ok===items.length){
+        const st=3;
+        $('#fnOut').innerHTML=`<div style="text-align:center"><div class="starsrow">⭐⭐⭐</div>
+         <h3 class="f" style="color:#fff">¡Embudo dominado!</h3>
+         <button class="btn teal" onclick="startFunnel()">Otra vez 🔁</button></div>`;
+        markDone('m2b',st,90,'Embudo de privacidad completado');sfx.win();
+      }
+    });
+  }
+  paint();
+}
+function mission2(tb){
+  const st=S.m2;
+  const POSTS=['Foto de tu dibujo ganador de un concurso','Video bailando en ropa interior en tu cuenta abierta',
+   'Publicación invitando a recoger basura en el parque','Captura de un chat privado de tu amigo',
+   'Tu opinión respetuosa sobre un libro','Foto de tu hermano menor en el baño con espuma',
+   'Enlace a una noticia con la fuente citada','Tu ubicación en tiempo real activada 24/7',
+   'Meme que creaste con tu propio arte','Datos de tu dirección en tu biografía pública'];
+  const SHIELD=['¿Quién puede ver mis publicaciones?','¿Quién puede enviarme solicitudes de amistad?','¿Quién puede ver mi lista de amigos?','¿Quién puede etiquetarme en fotos?','¿Quién puede ver mis historias?','¿Quién puede comentar mis publicaciones?','Permisos de ubicación de la app','Permisos de cámara y micrófono','¿Quién puede encontrarme por mi número de teléfono?','¿Quién puede descargar mis fotos?','Revisión de etiquetas antes de publicar','¿Quién puede enviarme mensajes directos?','Aplicaciones conectadas con mi cuenta','¿Quién puede ver mi información de contacto?','Alertas de inicio de sesión desconocido'];
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#f1eaff;color:#6b3fd1">Producto 2 · Manual de Supervivencia Digital</span>
+    <h2 class="sec f" style="margin-top:10px">Blinda tu propio perfil 🛡️</h2>
+    <p class="lead">Vas a diseñar el manual de supervivencia de <b>tu red social principal</b>. Todo se entrega a mano en papel milimetrado: tinta negra para el texto y <b>tinta roja para las advertencias de riesgo</b>. Cero borrones.</p>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Sección A · Auditoría de tu huella digital</h3>
+    <p class="lead">Clasifica estas 10 publicaciones (imagina que son tus últimas 10) en: <b style="color:#0f9c8e">Aporta a mi proyecto de vida</b> · <b style="color:#8a6100">Neutro</b> · <b style="color:#c0392b">Riesgo reputacional</b>.</p>
+    <div id="mAudit"></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Sección B · Matriz de blindaje (15 configuraciones)</h3>
+    <p class="lead">Indica el estado ACTUAL de tu cuenta y el estado OBJETIVO al que vas a llegar.</p>
+    ${tblHTML(['Configuración crítica','Estado actual','Estado objetivo'],SHIELD.map((s,i)=>[s,
+      `<select onchange="setShield(${i},'now',this.value)"><option>Abierto</option><option>Cerrado</option><option>No sé</option></select>`,
+      `<select onchange="setShield(${i},'goal',this.value)"><option>Cerrado</option><option>Abierto</option></select>`]).join(''))}
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Sección C · Protocolo de crisis</h3>
+    <p class="lead">Ordena los pasos exactos que seguirías si fueras víctima de ciberacoso o suplantación de identidad. (En tu informe los dibujas como diagrama de flujo con las rutas exactas del centro de ayuda.)</p>
+    <div id="mOrder"></div>
+    <button class="btn sm teal" onclick="checkOrder()">Comprobar orden</button>
+    <span id="orderOut" class="small"></span>
+  </div>
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn teal" onclick="finishMission2()">✅ Misión terminada</button>
+    <button class="btn" onclick="printMission2()">🖨️ Imprimir borrador</button>
+  </div>`;
+  // auditoría
+  const cats=['Aporta','Neutro','Riesgo'];
+  const correct=['Aporta','Riesgo','Aporta','Riesgo','Neutro','Riesgo','Aporta','Riesgo','Neutro','Riesgo'];
+  $('#mAudit').innerHTML=POSTS.map((p,i)=>`<div class="row" style="justify-content:space-between;gap:8px;padding:8px 0;border-bottom:1px dashed #dbe6f7">
+     <div style="flex:1;min-width:180px;font-size:14px;font-weight:700">${i+1}. ${p}</div>
+     <div class="row" style="gap:6px">${cats.map(c=>`<button class="btn sm" data-i="${i}" data-c="${c}" style="background:${S.m2.audit[i]===c?(c==='Aporta'?'#3ddc84':c==='Riesgo'?'#ff6b6b':'#ffd23f'):'#eef3ff'};color:${S.m2.audit[i]===c?(c==='Neutro'?'#3a2c00':'#fff'):'#12203a'}">${c}</button>`).join('')}</div>
+   </div>`).join('');
+  $$('#mAudit button').forEach(b=>b.onclick=()=>{S.m2.audit[b.dataset.i]=b.dataset.c;save();sfx.click();
+    const row=b.parentNode;row.querySelectorAll('button').forEach(x=>{x.style.background='#eef3ff';x.style.color='#12203a'});
+    const c=b.dataset.c;b.style.background=c==='Aporta'?'#3ddc84':c==='Riesgo'?'#ff6b6b':'#ffd23f';b.style.color=c==='Neutro'?'#3a2c00':'#fff';
+    if(b.dataset.c===correct[b.dataset.i])toast('¡Buen criterio! 👌')});
+  // orden
+  const STEPS=['Guardar evidencia con capturas (fecha, hora, usuario)','Bloquear al agresor','Reportar dentro de la plataforma citando sus normas','Contar a un adulto de confianza y a la escuela','Si es grave: denuncia ante la autoridad competente'];
+  if(!st.order||!st.order.length)st.order=shuffle(STEPS);
+  paintOrder();
+  window.checkOrder=()=>{
+    const good=st.order.every((s,i)=>s===STEPS[i]);
+    $('#orderOut').innerHTML=good?' <b style="color:#0f9c8e">¡Perfecto! Orden correcto ✅</b>':' <b style="color:#c0392b">Aún no. Recuerda: primero la evidencia, luego bloquear, después reportar.</b>';
+    if(good){sfx.ok();markDone('m2c',3,60,'Protocolo de crisis ordenado')}else sfx.bad();
+  };
+}
+function paintOrder(){
+  const st=S.m2;
+  $('#mOrder').innerHTML=st.order.map((s,i)=>`<div class="stepchip"><div class="n">${i+1}</div><div style="flex:1">${s}</div>
+    <button class="btn sm ghost" style="background:#eef3ff;color:#12203a" onclick="moveOrd(${i},-1)">▲</button>
+    <button class="btn sm ghost" style="background:#eef3ff;color:#12203a" onclick="moveOrd(${i},1)">▼</button></div>`).join('');
+}
+function moveOrd(i,d){const a=S.m2.order;const j=i+d;if(j<0||j>=a.length)return;[a[i],a[j]]=[a[j],a[i]];save();sfx.click();paintOrder()}
+function setShield(i,k,v){S.m2.shield[i]=S.m2.shield[i]||{};S.m2.shield[i][k]=v;save()}
+function finishMission2(){
+  const aud=Object.keys(S.m2.audit||{}).length;
+  if(aud<10){toast('Completa la auditoría de las 10 publicaciones ('+aud+'/10)');return}
+  const ok=S.done.m2c;
+  if(!ok){toast('Ordena correctamente el protocolo de crisis en la Sección C');return}
+  completeMission('m2','¡Manual de Supervivencia Digital listo!');
+}
+function printMission2(){
+  const POSTS=['Foto de tu dibujo ganador de un concurso','Video bailando en ropa interior en tu cuenta abierta','Publicación invitando a recoger basura en el parque','Captura de un chat privado de tu amigo','Tu opinión respetuosa sobre un libro','Foto de tu hermano menor en el baño con espuma','Enlace a una noticia con la fuente citada','Tu ubicación en tiempo real activada 24/7','Meme que creaste con tu propio arte','Datos de tu dirección en tu biografía pública'];
+  let h=`<h1 style="text-align:center;text-decoration:underline">Manual de Supervivencia Digital</h1>
+  <p>Estudiante: ${esc(S.name||'______')} · Fecha: ${new Date().toLocaleDateString('es')} · Red social principal: ______________</p>
+  <h2>Sección A · Auditoría de huella</h2><table><tr><th>#</th><th>Publicación</th><th>Clasificación</th></tr>
+  ${POSTS.map((p,i)=>`<tr><td>${i+1}</td><td>${p}</td><td>${esc((S.m2.audit||{})[i]||'')}</td></tr>`).join('')}</table>
+  <h2>Sección B · Matriz de blindaje</h2><table><tr><th>Configuración</th><th>Actual</th><th>Objetivo</th></tr>
+  ${Object.entries(S.m2.shield||{}).map(([k,v])=>`<tr><td>Configuración ${+k+1}</td><td>${esc(v.now||'')}</td><td>${esc(v.goal||'')}</td></tr>`).join('')||'<tr><td colspan="3">(completar a mano)</td></tr>'}</table>
+  <h2>Sección C · Protocolo de crisis</h2><ol>${(S.m2.order||[]).map(s=>'<li>'+s+'</li>').join('')}</ol>
+  <p style="margin-top:30px">Firma: ______________________</p>`;
+  doPrint(h);
+}
+
+/* ============================ MÓDULO 3 ============================ */
+function learn3(tb){
+  const FASES=[['1','Creación del contenido falso','Se fabrica con carga emocional: miedo, indignación o euforia.','#ff6b6b'],
+   ['2','Inyección en grupos cerrados','Entra por WhatsApp o Telegram, donde nadie puede verificar.','#ff9f1c'],
+   ['3','Salto a redes abiertas','Llega a X o Facebook y se viraliza en horas.','#ffd23f'],
+   ['4','Refuerzo en cámara de eco','Los que ya estaban de acuerdo lo repiten mil veces.','#3ddc84'],
+   ['5','Recogida por medios','Un medio lo publica sin verificar porque "está en redes".','#4cc9f0'],
+   ['6','Impacto en el mundo real','Violencia, decisiones erróneas, negocios cerrados. Y vuelve al 1.','#8b5cf6']];
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#ffe9e9;color:#c0392b">Clase 3 · Las redes son la nueva plaza pública de América Latina</span>
+    <h2 class="sec f" style="margin-top:10px">Las redes no reflejan la sociedad: la están remodelando 🌎</h2>
+    <p class="lead">Imagina que tu ciudad entera se reuniera en una plaza a hablar… pero la plaza fuera invisible, cambiara de forma cada segundo y tuviera un robot decidiendo a quién escuchas. Eso es internet.</p>
+    <div class="grid g2" style="align-items:center">
+      <div class="artframe">${ART.bubble}</div>
+      <div>
+        <div class="box warn" style="margin-top:0"><b>📢 Cámara de eco</b> — Entorno donde solo encuentras información que <b>refuerza lo que ya crees</b>. Elimina la "disonancia cognitiva" (esa molestia de escuchar a alguien distinto) y radicaliza las opiniones. Es una burbuja que <u>tú eliges</u>.</div>
+        <div class="box info"><b>🫧 Burbuja de filtro</b> — Parecida, pero <b>impuesta por el algoritmo sin que lo sepas</b>. El sistema decide qué es "relevante" según tu historial de clics y te oculta la diversidad del mundo real.</div>
+        <div class="box note"><b>🛋️ Slacktivismo (activismo de sofá)</b> — Apoyar causas con acciones de bajo esfuerzo: cambiar la foto de perfil, dar like a una petición. Genera la <b>ilusión</b> de impacto sin cambiar nada material.</div>
+        <div class="box tip"><b>🚀 Viralización</b> — El contenido escala de forma exponencial. NO gana por ser verdadero o bueno: gana por su <b>carga emocional</b> (indignación, miedo, euforia).</div>
+        <div class="box warn"><b>🦠 Desinformación estructural (fake news)</b> — Crear y difundir información falsa a propósito para manipular la opinión pública, ganar dinero o dañar a alguien. En Latinoamérica ha alterado elecciones y provocado linchamientos.</div>
+      </div>
+    </div>
+  </div>
+
+  ${acc('🌀 Figura 3 · El ciclo de la desinformación viral (6 fases)','🔄','#ff6b6b',`
+    <div class="cycle">${FASES.map(f=>`<div class="cyc" style="border-top-color:${f[3]}"><b>${f[0]}. ${f[1]}</b><small>${f[2]}</small></div>`).join('')}</div>
+    <div class="box warn" style="margin-top:12px"><b>Es un círculo vicioso:</b> la fase 6 genera emociones que alimentan la fase 1. La única forma de romperlo es <b>la pausa de verificación</b> en la fase 2 o 3.</div>
+    <div class="artframe" style="margin-top:12px">${ART.viral}</div>`,true)}
+
+  ${acc('🌳 Mapeo de causa y efecto: el Árbol de Impacto','🌳','#17c3b2',`
+    <div class="artframe">${ART.tree}</div>
+    <p class="lead" style="margin-top:12px">Conectores lógicos estrictos: <b>causa → efecto → consecuencia social</b>.</p>
+    <div class="box info"><b>Ejemplo dictado:</b> "Un video fuera de contexto de un comerciante local se viraliza en TikTok acusándolo de un delito".<br>
+    Video fuera de contexto → el algoritmo lo prioriza por indignación → viralización masiva → <b>Consecuencia 1:</b> linchamiento digital y amenazas → <b>Consecuencia 2:</b> cierre temporal del negocio por miedo.<br>
+    <b>Lección:</b> la falta de verificación previa destruye el tejido económico local.</div>`)}
+
+  ${acc('📊 Tabla 3 · Matriz de impacto sociodigital en Latinoamérica','📋','#8b5cf6',
+    tblHTML(['Ámbito','Oportunidad de conexión','Desafío / riesgo social','Caso real'],TABLA3),true)}
+
+  ${acc('🔎 Kit del detective digital (5 verificaciones)','🕵️','#4cc9f0',`
+    <ul class="tick">
+      <li><b>¿Quién lo publica?</b> Busca la cuenta original, no la que reenvió.</li>
+      <li><b>¿Cuándo pasó?</b> Mucho contenido viejo se recicla como si fuera de hoy.</li>
+      <li><b>¿Qué fuente cita?</b> Si no enlaza a un documento o institución, sospecha.</li>
+      <li><b>Búsqueda inversa de imágenes:</b> sube la foto y descubre dónde se usó antes.</li>
+      <li><b>¿Qué siento al leerlo?</b> Si te indigna mucho y muy rápido… probablemente fue diseñado así.</li>
+    </ul>`)}
+
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn coral" onclick="go('module',{mod:3,tab:'play'})">🎮 Ir a los juegos</button>
+    <button class="btn" onclick="go('module',{mod:3,tab:'mission'})">✍️ Ir a la Misión</button>
+  </div>`;
+}
+function play3(tb){
+  tb.innerHTML=`
+  <div class="grid g2">
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🕵️ Juego 3A · Detective de la información</h3>
+      <p class="lead">Te llegan 8 mensajes virales. ¿Los compartes o los verificas?</p>
+      <button class="btn coral" onclick="startDetective()">Jugar ▶</button></div>
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🌳 Juego 3B · Constructor de árboles de impacto</h3>
+      <p class="lead">3 fenómenos reales de Latinoamérica. Ordena la cadena causa → efecto.</p>
+      <button class="btn teal" onclick="startTrees()">Jugar ▶</button></div>
+  </div><div id="g3area" style="margin-top:16px"></div>`;
+}
+function startDetective(){
+  const items=shuffle(DETECTIVE);let i=0,ok=0;
+  const area=$('#g3area');
+  area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(255,107,107,.22);color:#ffc9c9">🕵️ Detective de la información</span>
+   <div class="pbar"><i id="dtBar"></i></div><div id="dtBody"></div></div>`;
+  function render(){
+    if(i>=items.length){
+      const st=ok>=8?3:ok>=6?2:1;
+      $('#dtBody').innerHTML=`<div style="text-align:center;padding:18px"><div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+       <h3 class="f" style="color:#fff">${ok}/${items.length} decisiones correctas</h3>
+       <div class="box tip" style="color:#0b5d50;text-align:left"><b>Romper la cadena</b> es el acto de ciudadanía más barato y más poderoso que existe: tarda 5 segundos.</div>
+       <button class="btn coral" onclick="startDetective()">Otra vez 🔁</button></div>`;
+      markDone('m3a',st,ok*14,'Detective completado');sfx.win();return;
+    }
+    const it=items[i];
+    $('#dtBar').style.width=(i/items.length*100)+'%';
+    $('#dtBody').innerHTML=`<div class="qbar"><span class="small" style="color:#9fb4d8">Mensaje ${i+1} de ${items.length}</span>
+     <div style="font-size:16.5px;font-weight:900;color:#fff;margin-top:6px;line-height:1.5">${it.s}</div></div>
+     <div class="box info" style="color:#22304d"><b>¿Qué haces?</b></div>
+     ${DET_OPTS.map((o,k)=>`<button class="opt" data-k="${k}">${o}</button>`).join('')}
+     <div id="dtOut"></div>`;
+    $$('#dtBody .opt').forEach(b=>b.onclick=()=>{
+      const k=+b.dataset.k;
+      if(k===it.ok){b.classList.add('ok');ok++;sfx.ok();
+        $('#dtOut').innerHTML=`<div class="box tip" style="color:#0b5d50"><b>PIX:</b> ${it.why}</div>`;
+        $$('#dtBody .opt').forEach(x=>x.classList.add('dis'));i++;setTimeout(render,2100)}
+      else{b.classList.add('no');sfx.bad();
+        $('#dtOut').innerHTML=`<div class="box warn" style="color:#7a2020">Esa opción alimenta el ciclo de la desinformación. Vuelve a intentarlo.</div>`;
+        setTimeout(()=>b.classList.remove('no'),500)}
+    });
+  }
+  render();
+}
+function startTrees(){
+  let ti=0;
+  const area=$('#g3area');
+  function render(){
+    if(ti>=TREES.length){
+      area.innerHTML=`<div class="game" style="text-align:center"><div class="starsrow">⭐⭐⭐</div>
+       <h3 class="f" style="color:#fff">¡Los 3 árboles completados!</h3>
+       <p class="lead" style="color:#b9c9e8">Ya sabes trazar causa → efecto → daño social. Ese es el pensamiento de un analista.</p>
+       <button class="btn teal" onclick="startTrees()">Repetir 🔁</button></div>`;
+      markDone('m3b',3,100,'Árboles de impacto completados');sfx.win();return;
+    }
+    const T=TREES[ti];
+    const arr=S._tree&&S._tree.i===ti?S._tree.arr:shuffle(T.steps.map((s,i)=>({s,i})));
+    S._tree={i:ti,arr:arr};
+    area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(23,195,178,.22);color:#5ff0e0">🌳 Árbol ${ti+1}/${TREES.length} · ${T.title}</span>
+     <h3 class="f" style="margin-top:8px">Ordena la cadena de impacto</h3>
+     <p class="lead" style="color:#b9c9e8;font-size:13.6px">Usa las flechas ▲▼ para ordenar de la causa a la consecuencia final.</p>
+     <div id="trList"></div>
+     <div class="row"><button class="btn teal" onclick="checkTree()">Comprobar</button><span id="trOut" class="small"></span></div></div>`;
+    paintList();
+  }
+  window.checkTree=()=>{
+    const T=TREES[S._tree.i];
+    const good=S._tree.arr.every((o,k)=>o.i===k);
+    if(good){
+      $('#trOut').innerHTML=`<b style="color:#5ff0e0"> ¡Árbol correcto! 🌳</b><br><span style="color:#ffd23f">Lección: ${T.lesson}</span>`;
+      sfx.ok();S._tree.i++;ti++;setTimeout(render,2400);
+    }else{$('#trOut').innerHTML=`<b style="color:#ff9f9f"> Todavía no: revisa qué viene primero.</b>`;sfx.bad()}
+  };
+  function paintList(){
+    $('#trList').innerHTML=S._tree.arr.map((o,k)=>`<div class="stepchip"><div class="n">${k+1}</div>
+      <div style="flex:1">${o.s}</div>
+      <button class="btn sm ghost" style="background:#eef3ff;color:#12203a" onclick="mvTree(${k},-1)">▲</button>
+      <button class="btn sm ghost" style="background:#eef3ff;color:#12203a" onclick="mvTree(${k},1)">▼</button></div>`).join('');
+  }
+  window.mvTree=(k,d)=>{const a=S._tree.arr;const j=k+d;if(j<0||j>=a.length)return;[a[k],a[j]]=[a[j],a[k]];sfx.click();paintList()};
+  render();
+}
+function mission3(tb){
+  const B=[['op','🌱 Oportunidades','#17c3b2'],['de','⚠️ Desafíos / riesgos','#ff6b6b'],['sm','🧠 Salud mental y bienestar','#8b5cf6'],['co','🏘️ Comunidad y cultura','#4cc9f0']];
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#e8fbf6;color:#0f9c8e">Producto 3 · Cartulina institucional 50 × 70 cm</span>
+    <h2 class="sec f" style="margin-top:10px">Mapa mental socio-tecnológico 🧠</h2>
+    <p class="lead">Elige un ámbito concreto (por ejemplo: <i>"El impacto de Instagram en el emprendimiento gastronómico de mi ciudad"</i>) y construye aquí tu borrador. Después lo pasas a la cartulina con tintas de colores, regla, escuadra y caligrafía técnica.</p>
+    <div class="box warn"><b>Criterio de reprobación:</b> textos impresos y pegados, dibujos sin proporción geométrica o caligrafía ilegible anulan el producto. La estética y el orden TAMBIÉN se evalúan.</div>
+    <input type="text" id="mmTopic" placeholder="Escribe tu nodo central (tu tema)" value="${esc(S.m3.topic||'')}" style="max-width:520px">
+  </div>
+  <div class="mindmap" style="margin-top:16px">
+    <div class="mmcenter" id="mmCenter">Tu tema aquí</div>
+    <div class="branches">
+      ${B.map(b=>`<div class="branch" style="background:linear-gradient(150deg,${b[2]},${shade(b[2],-30)})">
+        <h4 class="f">${b[1]}</h4>
+        <div id="mm_${b[0]}"></div>
+        <div class="row" style="gap:6px;margin-top:8px">
+          <input type="text" id="in_${b[0]}" placeholder="Agregar idea…" style="padding:8px 10px;font-size:13px">
+          <button class="btn sm" onclick="addNode('${b[0]}')">＋</button>
+        </div></div>`).join('')}
+    </div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Checklist de la cartulina</h3>
+    <div id="m3Checks"></div>
+  </div>
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn teal" onclick="finishMission3()">✅ Misión terminada</button>
+    <button class="btn" onclick="printMission3()">🖨️ Imprimir borrador</button>
+  </div>`;
+  const CH3=['Nodo central grande, centrado y con color','4 ramas principales con grosor decreciente','Al menos 4 ideas por rama','Iconos o dibujos con proporción geométrica (regla y escuadra)','Caligrafía técnica legible y uniforme','Colores distintos por rama','Conectores curvos (no líneas rectas sueltas)','Incluye una rama de impacto en salud mental/comunidad'];
+  renderChecks('m3Checks',CH3,S.m3,'checks');
+  const tp=$('#mmTopic');
+  tp.oninput=()=>{S.m3.topic=tp.value;save();$('#mmCenter').textContent=tp.value||'Tu tema aquí'};
+  $('#mmCenter').textContent=S.m3.topic||'Tu tema aquí';
+  paintNodes();
+  window.addNode=k=>{const inp=$('#in_'+k);const v=inp.value.trim();if(!v)return;S.m3.map[k].push(v);inp.value='';save();sfx.click();paintNodes()};
+  window.delNode=(k,i)=>{S.m3.map[k].splice(i,1);save();paintNodes()};
+  window.finishMission3=()=>{
+    const tot=B.reduce((a,b)=>a+S.m3.map[b[0]].length,0);
+    if(!S.m3.topic){toast('Escribe tu nodo central ✍️');return}
+    if(tot<12){toast('Agrega al menos 12 ideas en total (tienes '+tot+')');return}
+    if((S.m3.checks||[]).length<6){toast('Marca al menos 6 puntos del checklist');return}
+    completeMission('m3','¡Mapa mental diseñado!');
+  };
+}
+function paintNodes(){
+  ['op','de','sm','co'].forEach(k=>{
+    const c=document.getElementById('mm_'+k);if(!c)return;
+    c.innerHTML=S.m3.map[k].map((t,i)=>`<div class="mapnode" style="background:rgba(255,255,255,.22)">${esc(t)}<button onclick="delNode('${k}',${i})">✕</button></div>`).join('')||'<div class="small" style="color:rgba(255,255,255,.75)">Aún no hay ideas…</div>';
+  });
+}
+function printMission3(){
+  const B=[['op','Oportunidades'],['de','Desafíos / riesgos'],['sm','Salud mental y bienestar'],['co','Comunidad y cultura']];
+  doPrint(`<h1 style="text-align:center;text-decoration:underline">Mapa Mental Socio-Tecnológico del Ecosistema Digital</h1>
+  <p>Estudiante: ${esc(S.name||'______')} · Fecha: ${new Date().toLocaleDateString('es')}</p>
+  <h2 style="text-align:center">NODO CENTRAL: ${esc(S.m3.topic||'')}</h2>
+  ${B.map(b=>`<h3>${b[1]}</h3><ul>${S.m3.map[b[0]].map(x=>'<li>'+esc(x)+'</li>').join('')||'<li>(completar a mano)</li>'}</ul>`).join('')}
+  <p style="margin-top:20px">Formato de entrega: cartulina 50 × 70 cm, tintas de colores, regla y escuadra, caligrafía técnica.</p>`);
+}
+
+/* ============================ MÓDULO 4 ============================ */
+function learn4(tb){
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#fff8e1;color:#8a6100">Clase 4 · Si no pagas por el producto… el producto eres tú</span>
+    <h2 class="sec f" style="margin-top:10px">Soberanía de datos: tu superpoder ciudadano ⚖️</h2>
+    <p class="lead">Las redes sociales son las máquinas de extracción de datos más eficientes de la historia. La ciudadanía digital no termina en saber usar un botón: termina en <b>entender el contrato legal que firmaste</b> al hacer clic en "Aceptar".</p>
+    <div class="grid g2" style="align-items:center">
+      <div class="artframe">${ART.scroll}</div>
+      <div>
+        <div class="box info" style="margin-top:0"><b>📄 Términos de Servicio (ToS).</b> El <b>contrato de adhesión</b>: nadie lo negocia, todos lo firman. Contiene las cláusulas de cesión de derechos de imagen, la propiedad intelectual de lo que subes y los límites de responsabilidad de la empresa.</div>
+        <div class="box tip"><b>🩻 Política de Privacidad.</b> La radiografía del negocio: qué datos recoge, para qué, cómo los procesa y con quién los comparte. Si el servicio es "gratis", el producto son tus datos.</div>
+        <div class="box note"><b>✍️ Consentimiento informado.</b> En la práctica es una <b>ficción legal</b>: un muro de texto que debes aceptar para poder usar la app. La soberanía real exige leer las cláusulas de cesión a terceros.</div>
+        <div class="box warn"><b>🚩 Mecanismos de reporte.</b> Las plataformas son empresas privadas, no Estados. Sus botones de "Denunciar" son sus <b>tribunales internos</b>: conocer sus normas de comunidad es lo único que hace que un reporte funcione.</div>
+        <div class="box info"><b>🗑️ Derecho al olvido y supresión.</b> Facultad legal (LFPDPPP en México, Habeas Data en Colombia y Argentina) de pedir la eliminación de datos obsoletos o perjudiciales. <b>No es automático:</b> exige un trámite formal.</div>
+      </div>
+    </div>
+  </div>
+
+  ${acc('🏛️ Tabla 4 · Los 5 pilares de la soberanía digital','🧱','#ffd23f',
+    tblHTML(['Pilar','Definición técnica','Acción práctica del ciudadano'],TABLA4)+
+    `<div class="flipgrid" style="margin-top:14px">
+      ${[['Minimización','🤏','Dar solo lo necesario'],['Auditoría','🔍','Revisar permisos cada 3 meses'],['Separación','🎭','Una identidad para cada cosa'],['Verificación','🕵️','Dudar antes de compartir'],['Ejercicio legal','⚖️','Usar las leyes a tu favor']]
+       .map(p=>`<div class="flip" onclick="this.classList.toggle('on')"><div class="in2">
+        <div class="fc"><div style="font-size:34px">${p[1]}</div><b class="f">${p[0]}</b></div>
+        <div class="bk">${p[2]}</div></div></div>`).join('')}
+     </div>`,true)}
+
+  ${acc('👣 Huella digital = tu currículum oculto','👟','#8b5cf6',`
+    <div class="artframe">${ART.foot}</div>
+    <div class="box warn" style="margin-top:12px"><b>Todo es:</b> público · permanente · indexable · auditable. Un reclutador puede buscar tu nombre en 10 segundos. Lo que publicas a los 12 puede aparecerte a los 25.</div>
+    <div class="box tip"><b>Prueba del futuro yo:</b> antes de publicar, pregúntate "¿le mostraría esto a mi yo de 25 años en una entrevista de trabajo?".</div>`)}
+
+  ${acc('🧑‍⚖️ Método: la "Sentencia Técnica y Ciudadana"','📜','#ff6b6b',`
+    <p class="lead">Para cada caso real de violación de privacidad debes redactar <b>3 párrafos invariables</b>:</p>
+    <div class="flow">
+      <div class="fstep"><div class="dot" style="background:#ff6b6b">1</div><div><b class="f">Fallo técnico / normativo</b><div class="small">Qué cláusula de los ToS o qué principio de privacidad se violó.</div></div></div><div class="ln"></div>
+      <div class="fstep"><div class="dot" style="background:#ffd23f">2</div><div><b class="f">Impacto social</b><div class="small">Cómo afecta la confianza del ecosistema o los derechos del usuario.</div></div></div><div class="ln"></div>
+      <div class="fstep"><div class="dot" style="background:#17c3b2">3</div><div><b class="f">Veredicto ciudadano</b><div class="small">Acción correctiva inmediata y ejercicio de tu soberanía digital.</div></div></div>
+    </div>`,true)}
+
+  <div class="row" style="margin-top:16px;justify-content:center">
+    <button class="btn" onclick="go('module',{mod:4,tab:'play'})">🎮 Ir a los juegos</button>
+    <button class="btn purple" onclick="go('module',{mod:4,tab:'mission'})">✍️ Escribir mi Decálogo</button>
+  </div>`;
+}
+function play4(tb){
+  tb.innerHTML=`
+  <div class="grid g2">
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🧑‍⚖️ Juego 4A · Dilemas éticos y legales</h3>
+      <p class="lead">4 casos reales de Latinoamérica. Redacta tu sentencia eligiendo el fallo, el impacto y el veredicto correctos.</p>
+      <button class="btn coral" onclick="startDilemmas()">Jugar ▶</button></div>
+    <div class="card"><h3 class="f" style="margin:0 0 8px">🔐 Juego 4B · Auditor de permisos</h3>
+      <p class="lead">10 aplicaciones piden acceso a tu vida. ¿Conservar o revocar?</p>
+      <button class="btn teal" onclick="startPerms()">Jugar ▶</button></div>
+  </div><div id="g4area" style="margin-top:16px"></div>`;
+}
+function startDilemmas(){
+  let ci=0,ok=0,total=0;
+  const area=$('#g4area');
+  function render(){
+    if(ci>=DILEMMAS.length){
+      const st=ok>=total-1?3:ok>=total-4?2:1;
+      area.innerHTML=`<div class="game" style="text-align:center"><div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+       <h3 class="f" style="color:#fff">${ok}/${total} partes de la sentencia correctas</h3>
+       <div class="box tip" style="color:#0b5d50;text-align:left"><b>Recuerda la estructura:</b> Fallo técnico → Impacto social → Veredicto ciudadano. Así se escribe una sentencia profesional.</div>
+       <button class="btn coral" onclick="startDilemmas()">Otra vez 🔁</button></div>`;
+      markDone('m4a',st,ok*12,'Dilemas completados');sfx.win();return;
+    }
+    const D=DILEMMAS[ci];let qi=0;
+    area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(255,210,63,.2);color:#ffe9a8">⚖️ Caso ${ci+1} de ${DILEMMAS.length}</span>
+      <div class="qbar" style="margin-top:10px"><b style="color:#fff">📌 El caso:</b> ${D.c}</div><div id="dlBody"></div></div>`;
+    function q(){
+      if(qi>=D.qs.length){ci++;setTimeout(render,900);return}
+      const Q=D.qs[qi];total++;
+      $('#dlBody').innerHTML=`<div class="box info" style="color:#22304d"><b>${Q.t}</b></div>
+       ${shuffle(Q.opts.map((o,i)=>({o,i}))).map(x=>`<button class="opt" data-i="${x.i}">${x.o}</button>`).join('')}
+       <div id="dlOut"></div>`;
+      $$('#dlBody .opt').forEach(b=>b.onclick=()=>{
+        if(+b.dataset.i===Q.ok){b.classList.add('ok');ok++;sfx.ok();
+          $('#dlOut').innerHTML=`<div class="box tip" style="color:#0b5d50"><b>PIX:</b> ${Q.why}</div>`;
+          $$('#dlBody .opt').forEach(x=>x.classList.add('dis'));qi++;setTimeout(q,2000)}
+        else{b.classList.add('no');sfx.bad();setTimeout(()=>b.classList.remove('no'),500)}
+      });
+    }
+    q();
+  }
+  render();
+}
+function startPerms(){
+  const items=shuffle(PERMS);let i=0,ok=0;
+  const area=$('#g4area');
+  area.innerHTML=`<div class="game"><span class="pill" style="background:rgba(23,195,178,.22);color:#5ff0e0">🔐 Auditor de permisos</span>
+   <div class="pbar"><i id="pmBar"></i></div><div id="pmBody"></div></div>`;
+  function render(){
+    if(i>=items.length){
+      const st=ok>=9?3:ok>=7?2:1;
+      $('#pmBody').innerHTML=`<div style="text-align:center;padding:18px"><div class="starsrow">${'⭐'.repeat(st)}${'✩'.repeat(3-st)}</div>
+       <h3 class="f" style="color:#fff">${ok}/${items.length} decisiones correctas</h3>
+       <div class="box tip" style="color:#0b5d50;text-align:left"><b>Tarea real:</b> hoy mismo entra a Ajustes → Privacidad → Permisos y revoca 3 que no necesites.</div>
+       <button class="btn teal" onclick="startPerms()">Otra vez 🔁</button></div>`;
+      markDone('m4b',st,ok*12,'Auditoría de permisos completada');sfx.win();return;
+    }
+    const p=items[i];
+    $('#pmBar').style.width=(i/items.length*100)+'%';
+    $('#pmBody').innerHTML=`<div class="qbar"><div style="font-size:22px">${p.app}</div>
+      <div style="font-size:15.5px;color:#dbe6fb;margin-top:4px">Solicita: <b style="color:#ffd23f">${p.perm}</b></div></div>
+      <button class="opt" data-v="1">✅ Conservar permiso</button>
+      <button class="opt" data-v="0">🚫 Revocar permiso</button>
+      <div id="pmOut"></div>`;
+    $$('#pmBody .opt').forEach(b=>b.onclick=()=>{
+      const v=b.dataset.v==='1';
+      if(v===p.ok){b.classList.add('ok');ok++;sfx.ok();
+        $('#pmOut').innerHTML=`<div class="box tip" style="color:#0b5d50"><b>PIX:</b> ${p.why}</div>`;
+        $$('#pmBody .opt').forEach(x=>x.classList.add('dis'));i++;setTimeout(render,2100)}
+      else{b.classList.add('no');sfx.bad();
+        $('#pmOut').innerHTML=`<div class="box warn" style="color:#7a2020">Piensa en el principio de <b>minimización</b>: ¿ese permiso es necesario para la función principal?</div>`;
+        setTimeout(()=>b.classList.remove('no'),500)}
+    });
+  }
+  render();
+}
+function mission4(tb){
+  tb.innerHTML=`
+  <div class="card">
+    <span class="pill" style="background:#f1eaff;color:#6b3fd1">Producto 4 · Manifiesto individual en papel pergamino</span>
+    <h2 class="sec f" style="margin-top:10px">Mi Decálogo del Ciudadano Digital 📜</h2>
+    <p class="lead">10 reglas. Cada una tiene su <b>mandato</b>, su <b>fundamento técnico-normativo</b>, su <b>fundamento ético-social</b>… y lo más importante: <b>TU compromiso de proyecto de vida</b>. Escríbelo con pluma fuente o tinta indeleble, con caligrafía legible y sin tachaduras.</p>
+    <div class="artframe" style="max-width:420px;margin:0 auto">${ART.foot}</div>
+  </div>
+  <div id="decList"></div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">Checklist de entrega</h3>
+    <div id="m4Checks"></div>
+  </div>
+  <div class="card" style="margin-top:16px">
+    <h3 class="f" style="margin:0 0 8px">🏅 Generar mi diploma</h3>
+    <input type="text" id="certName" placeholder="Nombre completo del ciudadano/a digital" value="${esc(S.name||'')}" style="max-width:460px">
+    <div class="row" style="margin-top:12px">
+      <button class="btn teal" onclick="finishMission4()">✅ Misión terminada</button>
+      <button class="btn" onclick="printDecalogo()">🖨️ Imprimir decálogo</button>
+      <button class="btn purple" onclick="go('diploma')">🏅 Ver diploma</button>
+    </div>
+  </div>`;
+  const CH4=['Papel pergamino o de alto gramaje','Pluma fuente o tinta indeleble','Caligrafía legible, uniforme y sin tachaduras','Las 10 reglas con sus 4 partes completas','Carpeta física elaborada por mí','Sello con firma manuscrita (juramento cívico)','Ortografía y cohesión textual revisadas','Fecha y nombre de la institución'];
+  renderChecks('m4Checks',CH4,S.m4,'checks');
+  paintDec();
+}
+function paintDec(){
+  const c=$('#decList');if(!c)return;
+  c.innerHTML=DECALOGO.map((d,i)=>`
+   <div class="acc ${S.m4.commit[i]?'open':''}">
+    <button onclick="this.parentNode.classList.toggle('open');sfx.click()">
+      <span class="ic" style="background:${['#17c3b2','#8b5cf6','#ff6b6b','#ffd23f','#4cc9f0'][i%5]}22;color:${['#17c3b2','#8b5cf6','#ff6b6b','#e0b31f','#4cc9f0'][i%5]}">${i+1}</span>
+      <span>Regla ${i+1}: ${d.m}</span>
+      <span class="ar">${S.m4.commit[i]?'✔':'▶'}</span>
+    </button>
+    <div class="in"><div class="pad">
+      <div class="box info"><b>⚙️ Fundamento técnico-normativo:</b> ${d.tec}</div>
+      <div class="box tip"><b>🤝 Fundamento ético-social:</b> ${d.eti}</div>
+      <label class="small"><b>🎯 Mi compromiso de proyecto de vida</b> (mínimo 12 palabras)</label>
+      <textarea rows="3" oninput="setCommit(${i},this.value)" placeholder="Cómo lo aplicaré en mi vida y en mi futura carrera…">${esc(S.m4.commit[i]||'')}</textarea>
+      <div class="count" id="cw${i}">${(S.m4.commit[i]||'').trim().split(/\\s+/).filter(Boolean).length} / 12 palabras mín.</div>
+    </div></div></div>`).join('');
+}
+function setCommit(i,v){
+  S.m4.commit[i]=v;save();
+  const w=v.trim()?v.trim().split(/\s+/).length:0;
+  const el=document.getElementById('cw'+i);
+  if(el){el.textContent=w+' / 12 palabras mín.';el.className='count '+(w>=12?'good':'')}
+}
+function finishMission4(){
+  const done=DECALOGO.map((d,i)=>(S.m4.commit[i]||'').trim().split(/\s+/).filter(Boolean).length>=12).filter(Boolean).length;
+  if(done<10){toast('Te faltan compromisos por escribir ('+done+'/10)');return}
+  if((S.m4.checks||[]).length<6){toast('Marca al menos 6 puntos del checklist');return}
+  completeMission('m4','¡Decálogo del Ciudadano Digital terminado!');
+}
+function printDecalogo(){
+  doPrint(`<h1 style="text-align:center;text-decoration:underline">Decálogo de Ciudadanía y Supervivencia Digital</h1>
+  <p style="text-align:center">Yo, ${esc($('#certName')?$('#certName').value:S.name||'__________')}, declaro mi juramento cívico digital.</p>
+  ${DECALOGO.map((d,i)=>`<h3>Regla ${i+1}: ${d.m}</h3>
+   <p><b>Argumento técnico y normativo:</b> ${d.tec}</p>
+   <p><b>Argumento ético y social:</b> ${d.eti}</p>
+   <p><b>Compromiso de proyecto de vida:</b> ${esc(S.m4.commit[i]||'________________________')}</p>`).join('')}
+  <p style="margin-top:36px">Firma: ______________________ · Fecha: ____________ · Institución: ______________________</p>`);
+}
+
+/* ============================ DIPLOMA ============================ */
+function renderDiploma(v){
+  const st=totalStars();
+  const badges=[
+    {k:'m1a',n:'Lector/a de interfaces',e:'🕹️'},{k:'m1b',n:'Analista de elementos',e:'🧩'},
+    {k:'m2a',n:'Juez de la red',e:'🧑‍⚖️'},{k:'m2b',n:'Guardián de la privacidad',e:'🪜'},
+    {k:'m2c',n:'Protocolo de crisis',e:'🚨'},{k:'m3a',n:'Detective de la información',e:'🕵️'},
+    {k:'m3b',n:'Cartógrafo de impactos',e:'🌳'},{k:'m4a',n:'Jurista digital',e:'⚖️'},
+    {k:'m4b',n:'Auditor de permisos',e:'🔐'}];
+  const allMissions=['m1','m2','m3','m4'].every(k=>S.missions[k]);
+  v.innerHTML=`
+  <div class="card dark" style="text-align:center">
+    <h2 class="sec f" style="color:#fff">🏅 Tus logros</h2>
+    <p class="lead">${esc(S.name||'Guardián')} · Nivel actual: <b style="color:#ffd23f">${level()[1]}</b> · ${S.xp} XP · ${st} estrellas</p>
+    <div>${badges.map(b=>`<div class="badge ${S.done[b.k]?'':'off'}" title="${b.n}">${b.e}</div>`).join('')}
+    ${['m1','m2','m3','m4'].map(k=>`<div class="badge ${S.missions[k]?'':'off'}" title="Misión ${k.toUpperCase()}">📜</div>`).join('')}</div>
+  </div>
+  ${allMissions?`<div class="cert" style="margin-top:20px">
+    <div style="max-width:170px;margin:0 auto">${ART.medal}</div>
+    <h2 class="f" style="margin:8px 0 2px;font-size:30px">Diploma de Ciudadanía Digital</h2>
+    <p style="font-size:16px;margin:4px 0">Se otorga a</p>
+    <h3 class="f" style="font-size:28px;margin:2px 0 8px;border-bottom:2px solid #d4a72c;display:inline-block;padding:0 24px">${esc(S.name||'____________')}</h3>
+    <p style="max-width:620px;margin:8px auto;font-size:14.5px;line-height:1.6">Por completar los cuatro módulos del taller <b>Guardianes de la Red</b>: arquitectura de plataformas, netiqueta y privacidad, impacto socioeconómico del ecosistema digital y soberanía de datos; y por redactar, caligrafiar y jurar su propio Decálogo del Ciudadano Digital.</p>
+    <p style="font-size:13px">Fecha: ${new Date().toLocaleDateString('es',{year:'numeric',month:'long',day:'numeric'})} · Estrellas obtenidas: ${st}/13 · XP: ${S.xp}</p>
+    <div class="row" style="justify-content:center;margin-top:14px">
+      <button class="btn" onclick="printCert()">🖨️ Imprimir diploma</button>
+      <button class="btn teal" onclick="go('home')">🗺️ Volver al mapa</button>
+    </div>
+  </div>`:`<div class="card" style="margin-top:20px;text-align:center">
+    <h3 class="f" style="margin:0 0 6px">El diploma se desbloquea al completar las 4 misiones 📜</h3>
+    <p class="lead">Estado actual: ${['m1','m2','m3','m4'].map((k,i)=>`<span class="pill" style="background:${S.missions[k]?'#dcffe9':'#ffe6e6'};color:${S.missions[k]?'#166b3a':'#a02c2c'}">Módulo ${i+1}: ${S.missions[k]?'✔ lista':'pendiente'}</span>`).join(' ')}</p>
+    <button class="btn teal" onclick="go('home')">🗺️ Ir al mapa</button></div>`}`;
+}
+function printCert(){
+  doPrint(`<div style="text-align:center;border:8px double #d4a72c;padding:30px">
+   <h1>Diploma de Ciudadanía Digital</h1>
+   <p>Taller <b>Guardianes de la Red</b></p><h2 style="margin:20px 0">${esc(S.name||'____________')}</h2>
+   <p style="max-width:520px;margin:0 auto">Por completar los cuatro módulos del taller —arquitectura de plataformas, netiqueta y privacidad, impacto del ecosistema digital y soberanía de datos— y por redactar y jurar su Decálogo del Ciudadano Digital.</p>
+   <p style="margin-top:26px">Fecha: ${new Date().toLocaleDateString('es')} · Estrellas: ${totalStars()}/13 · XP: ${S.xp}</p>
+   <p style="margin-top:50px">Firma del estudiante: ____________________ &nbsp;&nbsp; Firma del docente: ____________________</p></div>`);
+}
+
+/* ---------- init ---------- */
+paintTop();
+go('home');
+if(!S.name){setTimeout(()=>modal(`<div style="text-align:center">${ART.robot}
+  <h3 class="f">¡Bienvenido/a al taller!</h3>
+  <p class="lead">Soy <b>PIX</b>, tu robot guía. Vamos a descubrir cómo están construidas las redes por dentro… y cómo protegerte de sus trampas.</p>
+  <input type="text" id="nm2" placeholder="Escribe tu nombre" style="margin-bottom:10px">
+  <button class="btn teal" onclick="S.name=document.getElementById('nm2').value.trim()||'Guardián';save();closeModal();toast('¡Hola, '+esc(S.name)+'! 🛡️');go('home')">¡Empezar! 🚀</button></div>`),600)}
+</script>
+</body>
+</html>

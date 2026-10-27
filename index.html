@@ -1365,7 +1365,7 @@ function gameOver(r){
 }
 function retryRun(){
   if(!PAC)return;
-  PAC.lives=3;PAC.over=false;PAC.runOver=false;
+  PAC.lives=99;PAC.over=false;PAC.runOver=false;
   $('#pOverlay').style.display='none';setupLevel();PAC.freeze=1200;
 }
 function newRun(){
